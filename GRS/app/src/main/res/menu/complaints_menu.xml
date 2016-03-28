@@ -7,6 +7,7 @@
         android:orderInCategory="100"
         android:title="Profile"
         android:icon="@drawable/default_profile"
+        android:actionViewClass="android.widget.ImageButton"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_notifs"
