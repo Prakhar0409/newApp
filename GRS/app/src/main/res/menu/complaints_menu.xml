@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.prakhar_squared_mayank.grs.MainActivity">
+    <item
+        android:id="@+id/action_profile"
+        android:orderInCategory="100"
+        android:title="Profile"
+        android:icon="@drawable/default_profile"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_notifs"
+        android:orderInCategory="100"
+        android:title="Notifications"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bookmarks"
+        android:orderInCategory="100"
+        android:title="Bookmarks"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_request_validation"
+        android:orderInCategory="100"
+        android:title="Request Validation"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_validation_requests"
+        android:orderInCategory="100"
+        android:title="Validation Requests"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_new_complaint"
+        android:orderInCategory="100"
+        android:title="Submit Complaint"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        app:showAsAction="never" />
+</menu>

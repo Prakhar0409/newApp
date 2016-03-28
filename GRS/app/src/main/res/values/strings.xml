@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GRS</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="problem_description">Yo man I got a problem. Yall know, I got 99 problems but the bitch aint one. I fixed some problem but still got 98 problems. I need ya help fr the rest of 98 problems Man. You gotta help me bro...</string>
+</resources>

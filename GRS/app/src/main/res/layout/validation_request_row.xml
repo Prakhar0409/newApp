@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#91f28a">
+
+    <ImageView
+        android:id="@+id/profile_pic_vrr"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#029587"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/username_vrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username Yo"
+        android:layout_toRightOf="@id/profile_pic_vrr"
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="19dp"/>
+
+    <TextView
+        android:id="@+id/group_text_vrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group: "
+        android:layout_alignLeft="@id/username_vrr"
+        android:layout_below="@id/username_vrr"
+        android:textSize="17dp"/>
+
+    <TextView
+        android:id="@+id/group_vrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/group_text_vrr"
+        android:text="UGS"
+        android:textSize="17dp"
+        android:layout_alignBottom="@id/group_text_vrr"/>
+
+    <TextView
+        android:id="@+id/post_text_vrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post: "
+        android:layout_alignLeft="@id/group_text_vrr"
+        android:layout_below="@id/group_text_vrr"
+        android:textSize="17dp"/>
+
+    <TextView
+        android:id="@+id/post_vrr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/post_text_vrr"
+        android:text="UGS"
+        android:textSize="17dp"
+        android:layout_alignBottom="@id/post_text_vrr"/>
+
+    <ImageView
+        android:id="@+id/reject_vrr"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#a63434"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:id="@+id/accept_vrr"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#3fa634"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/reject_vrr"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"/>
+
+</RelativeLayout>
