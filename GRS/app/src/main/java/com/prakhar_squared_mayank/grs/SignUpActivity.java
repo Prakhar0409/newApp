@@ -1,5 +1,6 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -113,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void uploadImage(){
         //Showing the progress dialog
-        //final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading Image...","Please wait...",false,false);
         String url=LoginActivity.ip+"/api/pictures.json";
         Log.d("Url hit was:",url);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -121,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onResponse(String s) {
                         //Disimissing the progress dialog
-                        // loading.dismiss();
+                         loading.dismiss();
                         //Showing toast message of the response
                         try {
                             JSONObject res= new JSONObject(s);
@@ -138,7 +139,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         //Dismissing the progress dialog
-                        //loading.dismiss();
+                        loading.dismiss();
                         //Showing toast
                         showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
                     }
