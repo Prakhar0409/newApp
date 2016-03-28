@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -31,11 +32,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText usernameET, passwordET, confPasswordET, hostelET;
+    EditText usernameET, passwordET, confPasswordET, hostelET,yearOfJoiningET;
     EditText fnameET, lnameET, uidET, contactET, emailET;
     Button signUpButton;
     TextView loginTV;
@@ -57,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         uidET = (EditText) findViewById(R.id.uid_asu);
         contactET = (EditText) findViewById(R.id.contact_asu);
         emailET = (EditText) findViewById(R.id.email_asu);
-
+        yearOfJoiningET=(EditText) findViewById(R.id.year_of_joining_asu);
         signUpButton = (Button) findViewById(R.id.signup_asu);
         signUpButton.setOnClickListener(this);
 
@@ -112,6 +114,64 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         return encodedImage;
     }
 
+    public void uploadData(int pic_id){
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
+        String url=LoginActivity.ip+"/user/signup.json";
+        Map<String, String> params = new HashMap();
+        params.put("first_name", fnameET.getText().toString().trim());
+        params.put("last_name", lnameET.getText().toString().trim());
+        params.put("username", usernameET.getText().toString().trim());
+        params.put("password", passwordET.getText().toString().trim());
+        params.put("registration_key", "1");
+        params.put("registration_id", "1");
+        params.put("reset_password_key", "not_allowed_currently");
+        params.put("email", emailET.getText().toString().trim());
+        params.put("hostel", hostelET.getText().toString().trim());
+        //params.put("degree_name", degree);
+        params.put("picture", Integer.toString(pic_id));
+        params.put("year_of_degree", yearOfJoiningET.getText().toString().trim());
+
+
+        JSONObject parameters = new JSONObject(params);
+
+        Log.d("Url hit was:",url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,parameters,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        String success= "Failed";
+                        int user_id=0;
+                        try {
+                            success = response.getString("success");
+                            user_id=response.getInt("user");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        showToast("Signup : "+success+" | UserID : "+Integer.toString(user_id));
+                        showComplaintsActivity();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        //Adding request to the queue
+        requestQueue.add(req);
+    }
+
     private void uploadImage(){
         //Showing the progress dialog
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading Image...","Please wait...",false,false);
@@ -129,6 +189,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             JSONObject data=res.getJSONObject("data");
                             int pic_id=data.getInt("id");
                             System.out.println("pic_id : "+pic_id);
+                            uploadData(pic_id);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -176,7 +237,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     void signupUser() {             // TODO: 26/03/16
         uploadImage();
-        showComplaintsActivity();
+
     }
 
     void showComplaintsActivity() {

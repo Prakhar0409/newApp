@@ -29,7 +29,7 @@
 
             <TextView
                 android:layout_marginLeft="1.5dp"
-                android:paddingLeft="35dp"
+                android:paddingLeft="0dp"
                 android:layout_gravity="bottom"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
@@ -112,6 +112,14 @@
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:hint="Hostel"/>
+
+        <EditText
+            android:id="@+id/year_of_joining_asu"
+            android:layout_width="300dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:hint="Year of Joining"/>
 
         <Button
             android:id="@+id/signup_asu"

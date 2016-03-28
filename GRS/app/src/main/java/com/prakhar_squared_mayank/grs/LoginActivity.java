@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static String ip="http://192.168.2.21:8000";//"10.0.2.2:8000";
+    public static String ip="http://192.168.40.1:8000";//"10.0.2.2:8000";
 
     EditText useridET, passwordET;
     TextView signupTV;
