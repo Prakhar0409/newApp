@@ -26,7 +26,8 @@
             android:name=".ComplaintsActivity"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".ValidationRequestActivity" />
-        <activity android:name=".ComplaintDetailActivity"></activity>
+        <activity android:name=".ComplaintDetailActivity" />
+        <activity android:name=".StatusDetailActivity"></activity>
     </application>
 
 </manifest>

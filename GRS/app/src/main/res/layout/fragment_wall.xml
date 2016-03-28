@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    tools:context="com.prakhar_squared_mayank.grs.WallFragment">
+
+    <LinearLayout
+        android:id="@+id/wall_linear_layout_ft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#920398">
+    </LinearLayout>
+
+</FrameLayout>

@@ -20,7 +20,7 @@ import org.json.JSONException;
 public class ComplaintDetailActivity extends AppCompatActivity {
 
     FragmentPagerAdapter adapterViewPager;
-    JSONArray timelineData;
+    JSONArray timelineData, commentData;
     TimelineFragment timeline;
 
     @Override
@@ -30,6 +30,7 @@ public class ComplaintDetailActivity extends AppCompatActivity {
 
         try {
             timelineData = new JSONArray("[{\"status_id\"=\"2\",\"status_name\"=\"Received supplies\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done2\"}]");
+            commentData = new JSONArray("[{\"comment\":\"Great Job!!\",\"comment_id\":\"31\",\"posted_by\":\"U29\",\"posted_on\":\"23:30 30-10-2016\"},{\"comment\":\"Appreciate it. This is a long bitchy comment. Fuck Yea. This is some m'fuckin test. And we bloody pass it. Oh yeah!!\",\"comment_id\":\"32\",\"posted_by\":\"U291\",\"posted_on\":\"23:30 01-11-2016\"}]");
         }
         catch(JSONException e) {
 
@@ -79,7 +80,7 @@ public class ComplaintDetailActivity extends AppCompatActivity {
                     timeline = TimelineFragment.newInstance(timelineData);
                     return timeline;
                 case 1: // Fragment # 0 - This will show FirstFragment different title
-                    return new OthersComplaintsFragment();
+                    return WallFragment.newInstance(commentData);
                 default:
                     return null;
             }
@@ -90,6 +91,9 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             if(position == 0) {
                 return "Timeline";
+            }
+            else if(position == 1) {
+                return "Wall";
             }
             return "Page " + position;
         }

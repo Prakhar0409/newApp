@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="#90a432">
+    android:background="#ecff96">
     <ImageView
         android:id="@+id/image_ti"
         android:layout_width="40dp"

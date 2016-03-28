@@ -2,7 +2,6 @@ package com.prakhar_squared_mayank.grs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,37 +9,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.Text;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TimelineFragment.OnFragmentInteractionListener} interface
+ * {@link WallFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TimelineFragment#newInstance} factory method to
+ * Use the {@link WallFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TimelineFragment extends Fragment {
+public class WallFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
-    private String timelineDataString;
+    private String wallDataString;
     View mainView;
-    JSONArray timelineData;
+    JSONArray wallData;
 
     private OnFragmentInteractionListener mListener;
 
-    public TimelineFragment() {
+    public WallFragment() {
         // Required empty public constructor
     }
 
-    public static TimelineFragment newInstance(JSONArray arr) {
-        TimelineFragment fragment = new TimelineFragment();
+    public static WallFragment newInstance(JSONArray arr) {
+        WallFragment fragment = new WallFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, arr.toString());
         fragment.setArguments(args);
@@ -51,9 +48,9 @@ public class TimelineFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            timelineDataString = getArguments().getString(ARG_PARAM1);
+            wallDataString = getArguments().getString(ARG_PARAM1);
             try {
-                timelineData = new JSONArray(timelineDataString);
+                wallData = new JSONArray(wallDataString);
             }
             catch (JSONException e) {
 
@@ -64,72 +61,62 @@ public class TimelineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.fragment_timeline, container, false);
-        makeTimeline();
+        mainView = inflater.inflate(R.layout.fragment_wall, container, false);
+
+        makeComments();
 
         return mainView;
     }
 
     public void updateTimeline(JSONArray arr) {
-        timelineData = arr;
-        makeTimeline();
+        wallData = arr;
+        makeComments();
     }
 
-    public void makeTimeline() {
-        String title1="Error with data.", id1="";
-        try {
-            title1 = timelineData.getJSONObject(0).getString("status_name");
-            id1 = timelineData.getJSONObject(0).getString("status_id");
-        }
-        catch (JSONException e) {
+    public void makeComments() {
+//        String title1="Error with data.", id1="";
+//        try {
+//            title1 = wallData.getJSONObject(0).getString("status_name");
+//            id1 = wallData.getJSONObject(0).getString("status_id");
+//        }
+//        catch (JSONException e) {
+//
+//        }
+//        TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
+//        titleTV.setText(title1);
 
-        }
-        TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
-        titleTV.setText(title1);
 
-
-        for(int index = 1;index < timelineData.length();index++) {
-            Log.d("TimelineFragment", "Adding timeline event");
-            String title="Error with data.", id="";
+        for(int index = 0;index < wallData.length();index++) {
+            Log.d("WallFragment", "Adding timeline event");
+            String comment="Error with data.", id="";
             try {
-                title = timelineData.getJSONObject(index).getString("status_name");
-                id = timelineData.getJSONObject(index).getString("status_id");
+                comment = wallData.getJSONObject(index).getString("comment");
+                id = wallData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
 
             }
-            addChildLayout(title, id);
+            addChildLayout(comment, id);
         }
     }
 
     public void clearLinearLayout() {
-        LinearLayout linearLayout = (LinearLayout)mainView.findViewById(R.id.timeline_linear_layout_ft);
+        LinearLayout linearLayout = (LinearLayout)mainView.findViewById(R.id.wall_linear_layout_ft);
         linearLayout.removeAllViewsInLayout();
     }
 
-    public void addChildLayout(final String title, final String id){
+    public void addChildLayout(String comment, String id){
 
         LayoutInflater layoutInflater=(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        LinearLayout linearLayout = (LinearLayout)mainView.findViewById(R.id.timeline_linear_layout_ft);
+        LinearLayout linearLayout = (LinearLayout)mainView.findViewById(R.id.wall_linear_layout_ft);
 
-        View view = layoutInflater.inflate(R.layout.timeline_item, null);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
-        TextView titleTV = (TextView) view.findViewById(R.id.text_ti);
-        titleTV.setText(title);
+        View view = layoutInflater.inflate(R.layout.comment_item, null);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        TextView titleTV = (TextView) view.findViewById(R.id.text_ci);
+        titleTV.setText(comment);
 
-        ImageView image = (ImageView) view.findViewById(R.id.image_ti);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent it = new Intent(getActivity(), StatusDetailActivity.class);
-                it.putExtra("STATUS_ID", id);
-                it.putExtra("STATUS_NAME", title);
-                getActivity().startActivity(it);
-            }
-        });
-
-        Log.d("TimelineFragment", "Adding timeline event: " + title);
+        Log.d("TimelineFragment", "Adding timeline event: " + comment);
         linearLayout.addView(view);
         Log.d("TimelineFragment", "Count now: " + linearLayout.getChildCount());
 
