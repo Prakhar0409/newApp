@@ -84,7 +84,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
 
     public void makeTimeline() {
         clearLinearLayout();
-        String title1="Error with data.", id1="";
+        String title1="No data.", id1="";
         try {
             title1 = timelineData.getJSONObject(0).getString("status_name");
             id1 = timelineData.getJSONObject(0).getString("status_id");

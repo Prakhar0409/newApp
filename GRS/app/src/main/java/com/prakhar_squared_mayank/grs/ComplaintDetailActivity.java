@@ -35,7 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
-public class ComplaintDetailActivity extends AppCompatActivity {
+public class ComplaintDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     String imageString=null;
     int c_id;
@@ -44,7 +44,11 @@ public class ComplaintDetailActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     JSONArray timelineData, commentData;
     TimelineFragment timeline;
-    ImageView bookmarkIV;
+    WallFragment wallF;
+    ImageView bookmarkIV, upIV, downIV;
+    boolean bookmarkedA = false;
+    TextView c_upcount, c_downcount;
+    int voteStatus = -2, complaintID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +61,50 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         JSONObject Complaint = null;
         try {
             Complaint = new JSONObject(complaintString);
-            TextView c_title = (TextView) findViewById(R.id.title_acd);  c_title.setText(Complaint.getString("complaint_title"));
-            TextView c_description=(TextView) findViewById(R.id.complaint_description_acd);  c_description.setText(Complaint.getString("complaint_details"));
-            TextView c_upcount=(TextView) findViewById(R.id.up_count_acd);  c_upcount.setText(Complaint.getString("upvotes_count"));
-            TextView c_downcount=(TextView) findViewById(R.id.down_count_acd);  c_downcount.setText(Complaint.getString("downvotes_count"));
-            TextView c_status=(TextView) findViewById(R.id.status_acd);  c_status.setText(Complaint.getString("status_id"));
+            TextView c_title = (TextView) findViewById(R.id.title_acd);
+            c_title.setText(Complaint.getString("complaint_title"));
+
+            TextView c_description=(TextView) findViewById(R.id.complaint_description_acd);
+            c_description.setText(Complaint.getString("complaint_details"));
+
+            c_upcount=(TextView) findViewById(R.id.up_count_acd);
+            if(Complaint.getString("upvotes_count").equals("null")) {
+                c_upcount.setText("0");
+            }
+            else {
+                c_upcount.setText(Complaint.getString("upvotes_count"));
+            }
+
+            c_downcount=(TextView) findViewById(R.id.down_count_acd);
+            if(Complaint.getString("downvotes_count").equals("null")) {
+                c_downcount.setText("0");
+            }
+            else {
+                c_downcount.setText(Complaint.getString("downvotes_count"));
+            }
+
+            TextView c_status=(TextView) findViewById(R.id.status_acd);
+            c_status.setText(Complaint.getString("status_id"));
+
             TextView c_resolvedOn=(TextView) findViewById(R.id.resolved_acd);
+            c_resolvedOn.setText(Complaint.getString("date_resolved"));
 
-                c_resolvedOn.setText(Complaint.getString("date_resolved"));
+            TextView c_Location = (TextView) findViewById(R.id.location_acd);
+            c_Location.setVisibility(View.INVISIBLE);
+//            c_Location.setText(Complaint.getString("complaint_location"));
 
-            TextView c_Location = (TextView) findViewById(R.id.location_acd); c_Location.setText(Complaint.getString("complaint_location"));
-            TextView c_postedBy = (TextView) findViewById(R.id.posted_by_acd); c_postedBy.setText(Complaint.getString("posted_by"));
-            TextView c_PostedOn = (TextView) findViewById(R.id.posted_on_acd);  c_PostedOn.setText(Complaint.getString("date_posted"));
+            TextView c_postedBy = (TextView) findViewById(R.id.posted_by_acd);
+            c_postedBy.setText(Complaint.getString("posted_by"));
+
+            TextView c_PostedOn = (TextView) findViewById(R.id.posted_on_acd);
+            c_PostedOn.setText(Complaint.getString("date_posted"));
+
+            bookmarkedA = Complaint.getBoolean("bookmarked");
+            Log.d("ComplaintDetailA", "bookmarked: " + bookmarkedA);
+
+            voteStatus = Complaint.optInt("vote_status", -2);
+            complaintID = Complaint.optInt("id", 0);
+
             c_pic = (ImageView) findViewById(R.id.complaint_pic_acd);
 
 
@@ -82,11 +118,21 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         }
 
         bookmarkIV = (ImageView) findViewById(R.id.bookmark_acd);
+        setBookmark(bookmarkedA);
+
+        upIV = (ImageView) findViewById(R.id.up_image_acd);
+        upIV.setOnClickListener(this);
+
+        downIV = (ImageView) findViewById(R.id.up_image_acd);
+        upIV.setOnClickListener(this);
+
+        setVoteStatus();
 
         try {
             getTimeLineData();
-            timelineData = new JSONArray("[{\"status_id\"=\"2\",\"status_name\"=\"Received supplies\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done2\"}]");
-            commentData = new JSONArray("[{\"comment\":\"Great Job!!\",\"comment_id\":\"31\",\"posted_by\":\"U29\",\"posted_on\":\"23:30 30-10-2016\"},{\"comment\":\"Appreciate it. This is a long bitchy comment. Fuck Yea. This is some m'fuckin test. And we bloody pass it. Oh yeah!!\",\"comment_id\":\"32\",\"posted_by\":\"U291\",\"posted_on\":\"23:30 01-11-2016\"}]");
+            getCommentData();
+            timelineData = new JSONArray("[{\"status_id\"=\"-2\",\"status_name\"=\"Loading data...\"}]");
+            commentData = new JSONArray("[{\"comment\":\"Loading data...\",\"comment_id\":\"-2\",\"posted_by\":\"U29\",\"posted_on\":\"23:30 30-10-2016\"}]");
         }
         catch(JSONException e) {
 
@@ -96,7 +142,23 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         vpPager.setAdapter(adapterViewPager);
     }
 
+    public void setVoteStatus() {
+        if(voteStatus == 0) {
+            upIV.setImageResource(R.drawable.up_grey);
+            downIV.setImageResource(R.drawable.down_grey);
+        }
+        else if(voteStatus == -1) {
+            upIV.setImageResource(R.drawable.up_grey);
+            downIV.setImageResource(R.drawable.down_red);
+        }
+        else if(voteStatus == 1) {
+            upIV.setImageResource(R.drawable.up_red);
+            downIV.setImageResource(R.drawable.down_grey);
+        }
+    }
+
     public void setBookmark(boolean bookmarked) {
+        Log.d("ComplaintDetailA", "bookmarked set: "+bookmarkedA);
         if(bookmarked) {
             bookmarkIV.setImageResource(R.drawable.yes_bookmark);
         }
@@ -107,46 +169,75 @@ public class ComplaintDetailActivity extends AppCompatActivity {
 
 
     public void getTimeLineData( ){
-//        String url1=LoginActivity.ip+"/complaints/concerning/"+((ComplaintsActivity)getActivity()).user_id+".json";
-//
-//        System.out.println("Url being hit is : " + url1);
-//        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                String success="";
-//                try {
-//                    success= (String) response.get("success");
-//
-//                    success= (String) response.get("success");
-//                    if(success.equals("True")){
-//                        data = (JSONArray) response.get("data");
-//                        showToast("Data Fetched!");
-//                        for (int i=0;i<data.length();i++){
-//                            System.out.println("data "+Integer.toString(i)+" : "+data.get(i));
-//                        }
-//                        updateAdapter(data);
-//                    }else{
-//                        showToast("Fetch data failed");
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                System.out.println("data1111 : "+response);
-//                System.out.println(success);
-//
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//                System.out.println("volley failed");
-//            }
-//        }
-//        );
-//        RequestQueue v = Volley.newRequestQueue(getActivity());
-//        v.add(req1);
+        String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
+
+        System.out.println("Url being hit is : " + url1);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String success="";
+                try {
+                    if(response.has("data") && !response.isNull("data")){
+                        timelineData = (JSONArray) response.get("data");
+                        setTimeline();
+                        showToast("Data Fetched!");
+                    }else{
+                        showToast("Fetch data failed");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("data timeline : "+response);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
+    }
+
+    public void getCommentData( ){
+        String url1="http://"+LoginActivity.ip+"/comments/complaint?complaint_id="+complaintID;
+
+        System.out.println("Url being hit is : " + url1);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String success="";
+                try {
+                    if(response.has("data") && !response.isNull("data")){
+                        commentData = (JSONArray) response.get("data");
+                        setWall();
+                        showToast("Data Fetched!");
+                    }else{
+                        showToast("Fetch data failed");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("data timeline : "+response);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
     }
 
     public Bitmap getImage(String pic) {
@@ -214,19 +305,28 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    void getData() {
-        try {
-            timelineData = new JSONArray("[{\"status_id\"=\"2\",\"status_name\"=\"Received supplies\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done2\"}]");
-        }
-        catch(JSONException e) {
-
-        }
-        setTimeline();
-    }
 
     void setTimeline() {
-        if(timeline != null) {
+        Log.d("CDA", "Setting timeline "+timelineData.toString());
+        if(timeline != null && timelineData != null) {
             timeline.updateTimeline(timelineData);
+        }
+    }
+
+    void setWall() {
+        Log.d("CDA", "Setting wall "+commentData.toString());
+        if(wallF != null && commentData != null) {
+            wallF.updateWall(commentData);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.up_image_acd:
+                break;
+            case R.id.down_image_acd:
+                break;
         }
     }
 
@@ -251,7 +351,8 @@ public class ComplaintDetailActivity extends AppCompatActivity {
                     timeline = TimelineFragment.newInstance(timelineData);
                     return timeline;
                 case 1: // Fragment # 0 - This will show FirstFragment different title
-                    return WallFragment.newInstance(commentData);
+                    wallF = WallFragment.newInstance(commentData);
+                    return wallF;
                 default:
                     return null;
             }

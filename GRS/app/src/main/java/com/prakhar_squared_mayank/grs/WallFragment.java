@@ -68,29 +68,19 @@ public class WallFragment extends Fragment {
         return mainView;
     }
 
-    public void updateTimeline(JSONArray arr) {
+    public void updateWall(JSONArray arr) {
         wallData = arr;
         makeComments();
     }
 
     public void makeComments() {
-//        String title1="Error with data.", id1="";
-//        try {
-//            title1 = wallData.getJSONObject(0).getString("status_name");
-//            id1 = wallData.getJSONObject(0).getString("status_id");
-//        }
-//        catch (JSONException e) {
-//
-//        }
-//        TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
-//        titleTV.setText(title1);
-
+        clearLinearLayout();
 
         for(int index = 0;index < wallData.length();index++) {
             Log.d("WallFragment", "Adding timeline event");
             String comment="Error with data.", id="";
             try {
-                comment = wallData.getJSONObject(index).getString("comment");
+                comment = wallData.getJSONObject(index).getString("comment_made");
                 id = wallData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
