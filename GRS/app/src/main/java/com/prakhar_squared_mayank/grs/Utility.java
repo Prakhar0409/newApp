@@ -34,7 +34,9 @@ public class Utility {
     public static String POSTSTATUSCOMMENT="/status/comment";
     public static String GETSTATUSCOMMENT="complaint/status/comment";
     public static String POSTWALLCOMMENT="/complaint/comment";
-    public static String BOOKMARKCOMPLAINTS="/complaint/comment";
+    public static String BOOKMARKCOMPLAINTS="";
+    public static String MARKRESOLVED="complaint/mark_resolve";
+    public static String CHANGEBOOKMARKSTATUS="";
 
     public static JSONObject USER=null;
     public static List<ComplaintLevel> complaintLevels=null;

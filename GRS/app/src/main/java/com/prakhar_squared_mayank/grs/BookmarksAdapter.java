@@ -94,7 +94,12 @@ public class BookmarksAdapter extends BaseAdapter {
         boolean bookmarked = true;
 
         if (jsonObject.has("complaint_title")) {
-            title = (jsonObject.optString("complaint_title")).toUpperCase();
+            if(jsonObject.optBoolean("resolved", false)) {
+                title = ("[RESOLVED] "+jsonObject.optString("complaint_title")).toUpperCase();
+            }
+            else {
+                title = (jsonObject.optString("complaint_title")).toUpperCase();
+            }
         }
 
         if (jsonObject.has("complaint_details")) {

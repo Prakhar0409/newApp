@@ -1,6 +1,8 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,19 +11,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,6 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 public class ComplaintDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     String imageString=null;
@@ -46,9 +57,10 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     TimelineFragment timeline;
     WallFragment wallF;
     ImageView bookmarkIV, upIV, downIV;
-    boolean bookmarkedA = false;
+    boolean bookmarkedA = false, resolvable = false, resolved = false;
     TextView c_upcount, c_downcount;
     int voteStatus = -2, complaintID = 0;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +72,17 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
         JSONObject Complaint = null;
         try {
+
+            resolved = Complaint.getBoolean("resolved");
+
             Complaint = new JSONObject(complaintString);
             TextView c_title = (TextView) findViewById(R.id.title_acd);
-            c_title.setText(Complaint.getString("complaint_title"));
+            if(!resolved) {
+                c_title.setText(Complaint.getString("complaint_title"));
+            }
+            else {
+                c_title.setText("[RESOLVED] "+Complaint.getString("complaint_title"));
+            }
 
             TextView c_description=(TextView) findViewById(R.id.complaint_description_acd);
             c_description.setText(Complaint.getString("complaint_details"));
@@ -101,6 +121,18 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
             bookmarkedA = Complaint.getBoolean("bookmarked");
             Log.d("ComplaintDetailA", "bookmarked: " + bookmarkedA);
+
+            resolvable = Complaint.getBoolean("to_resolve");
+            if(!resolvable) {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(false);
+                this.invalidateOptionsMenu();
+            }
+            else {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(true);
+                this.invalidateOptionsMenu();
+            }
 
             voteStatus = Complaint.optInt("vote_status", -2);
             complaintID = Complaint.optInt("id", 0);
@@ -167,6 +199,105 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.complaint_detail_menu, menu);
+        this.menu = menu;
+
+        return true;
+    }
+
+    void markComplaintResoled() {
+        final ProgressDialog loading = ProgressDialog.show(this,"Marking Resolved...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.MARKRESOLVED;
+        Log.d("Url hit was:",url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("complaint_id", complaintID+"");
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        volleySingleton.getInstance(this).getRequestQueue().add(stringRequest);
+    }
+
+    void showMarkResolveDialog() {
+        Log.d("Timeline fragment", "New Status");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mark Resolved?");
+
+        final LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(15, 5, 15, 5);
+        final TextView tv = new TextView(this);
+        tv.setText("Are you sure you want to mark complaint as resolved?");
+//        final EditText input2 = new EditText(this);
+//        input2.setInputType(InputType.TYPE_CLASS_TEXT);
+//        input2.setHint("Enter status here");
+
+        ll.addView(tv);
+        builder.setView(ll);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(complaintID != -2) {
+                    markComplaintResoled();
+                }
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_mark_resolved) {
+            showMarkResolveDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void getTimeLineData( ){
         String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
