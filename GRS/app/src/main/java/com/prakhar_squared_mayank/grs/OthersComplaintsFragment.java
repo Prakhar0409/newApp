@@ -65,7 +65,7 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
     }
 
     void getData() {
-        String url2=LoginActivity.ip+"/complaints/work/"+((ComplaintsActivity)getActivity()).user_id+".json";
+        String url2="http://"+LoginActivity.ip+"/complaint/complaints/solve";
         System.out.println("Url being hit is : " + url2);
 
         JsonObjectRequest req2 = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
@@ -74,14 +74,17 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
                 String success="";
                 try {
 
-                    success= (String) response.get("success");
+                    Log.d("getting data", ""+response.has("data"));
+                    Log.d("getting data", ""+!response.isNull("data"));
 
-                    if(success.equals("True")){
+                    if(response.has("data") && !response.isNull("data")){
+                        Log.d("getting data", "holla");
                         data = (JSONArray) response.get("data");
                         showToast("Data2 Fetched!");
                         for (int i=0;i<data.length();i++){
                             System.out.println("222data "+Integer.toString(i)+" : "+data.get(i));
                         }
+                        updateAdapter(data);
                     }else{
                         showToast("Fetch data2 ");
                     }

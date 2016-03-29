@@ -11,6 +11,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,6 +44,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         profilePicIV = (ImageView) findViewById(R.id.profile_pic_ap);
         profilePicIV.setOnClickListener(this);
+
+        setData();
+    }
+
+    void setData() {
+        JSONObject user = Utility.USER;
+
+        usernameTV.setText(user.optString("username"));
+        fnameTV.setText(user.optString("first_name"));
+        lnameTV.setText(user.optString("last_name"));
+        entryTV.setText(user.optString("registration_key", "nil"));
+        contactTV.setText(user.optString("contact", "nil"));
+        emailTV.setText(user.optString("email_id", "nil"));
+        hostelTV.setText(user.optString("hostel_name", "nil"));
     }
 
     void selectUserPic() {

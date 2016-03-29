@@ -23,6 +23,7 @@ public class Utility {
     public static JSONObject USER=null;
 
     public static boolean DEBUG = true;
+    public static JSONObject USER;
 
 
     public static void showMsg(Context ctx, String m)
