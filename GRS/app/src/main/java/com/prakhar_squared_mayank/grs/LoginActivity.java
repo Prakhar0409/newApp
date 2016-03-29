@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signupTV = (TextView) findViewById(R.id.signup_al);
         signupTV.setOnClickListener(this);
 
+
         CookieManager manager = new CookieManager( null, CookiePolicy.ACCEPT_ALL );
         CookieHandler.setDefault(manager);
 
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (success){
                         Log.d("success", "true");
                         user = response.getJSONObject("user");
+                        Utility.USER=user;
                         if(user != null){
                             Log.d("user_null", "not null");
                             showComplaintsActivity(user);
@@ -122,8 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
         );
-        RequestQueue v = Volley.newRequestQueue(this);
-        v.add(req);
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 
     //function to hide keypad when screen is touched

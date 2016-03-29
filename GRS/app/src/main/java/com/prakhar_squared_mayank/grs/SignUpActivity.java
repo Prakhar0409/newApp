@@ -41,10 +41,15 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener {
     EditText usernameET, passwordET, confPasswordET, hostelET,yearOfJoiningET;
+    JSONArray hostelsJson=null;
     EditText fnameET, lnameET, uidET, contactET, emailET;
+    List<String> hostelList=null;
+    boolean FlagPicSelected=false;
     Button signUpButton;
     TextView loginTV;
     ImageView profilePicIV;
@@ -63,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //hostelET = (EditText) findViewById(R.id.hostel_asu);
         fnameET = (EditText) findViewById(R.id.fname_asu);
         lnameET = (EditText) findViewById(R.id.lname_asu);
-        uidET = (EditText) findViewById(R.id.uid_asu);
+
         contactET = (EditText) findViewById(R.id.contact_asu);
         emailET = (EditText) findViewById(R.id.email_asu);
         yearOfJoiningET=(EditText) findViewById(R.id.year_of_joining_asu);
@@ -82,14 +87,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         // Spinner click listener
         hostels.setOnItemSelectedListener(this);
 
-
+        getData();
         Utility.setupUI(SignUpActivity.this, findViewById(R.id.signupView));
 
     }
 
     void setHostelSpinner(JSONArray arr) {
         // Spinner Drop down elements
-        List<String> hostelList = new ArrayList<String>();
+        hostelList = new ArrayList<String>();
         hostelList.add("None");
 
         for(int i=0;i<arr.length();i++) {
@@ -114,6 +119,40 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         hostels.setAdapter(dataAdapter);
     }
 
+    public void getData(){
+        String url="http://"+Utility.IP+Utility.HOSTELS;
+        final ProgressDialog loading = ProgressDialog.show(this,"Fetching data...","Please wait...",false,false);
+        Log.d("Url hit was:", url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        try {
+                            hostelsJson=response.getJSONArray("data");
+                            System.out.println(hostelsJson);
+                            setHostelSpinner(hostelsJson);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
+    }
+
     void selectUserPic() {
         Intent intent = new Intent();
         // Show only images, no videos or anything else
@@ -134,12 +173,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d("SignUp", String.valueOf(bitmap));
                 int nh = (int) ( bitmap.getHeight() * (256.0 / bitmap.getWidth()) );
                 scaledBitmap = Bitmap.createScaledBitmap(bitmap, 256, nh, true);
-
                 profilePicIV.setImageBitmap(scaledBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        FlagPicSelected =true;
     }
 
 
@@ -156,44 +195,64 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     public void uploadData(int pic_id){
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
-        String url="http://"+Utility.IP+"/user/signup.json";
+        String url="http://"+Utility.IP+Utility.UPLOADUSERDATA;
         Map<String, String> params = new HashMap();
+
+        String hostel=hostels.getSelectedItem().toString();
+        int hostel_id=0;
+        for(int i=0;i<hostelsJson.length();i++) {
+            String name = "";
+            try {
+                JSONObject hostelJ = hostelsJson.getJSONObject(i);
+                String hostelName = hostelJ.getString("hostel_name");
+                if(hostelName.equals(hostel)){
+                    hostel_id=hostelJ.getInt("id");
+                }
+            }
+            catch(JSONException e) {
+                Log.d("eror","aagayi");
+                e.printStackTrace();
+            }
+        }
+
+
+
         params.put("first_name", fnameET.getText().toString().trim());
         params.put("last_name", lnameET.getText().toString().trim());
         params.put("username", usernameET.getText().toString().trim());
         params.put("password", passwordET.getText().toString().trim());
-        params.put("registration_key", "1");
-        params.put("registration_id", "1");
-        params.put("reset_password_key", "not_allowed_currently");
-        params.put("email", emailET.getText().toString().trim());
-        params.put("hostel", hostelET.getText().toString().trim());
+        //params.put("registration_key", "1");
+        //params.put("registration_id", "1");
+        //params.put("reset_password_key", "not_allowed_currently");
+        params.put("email_id", emailET.getText().toString().trim());
+        params.put("hostel_id", Integer.toString(hostel_id));
         //params.put("degree_name", degree);
-        params.put("picture", Integer.toString(pic_id));
+        params.put("picture_id", Integer.toString(pic_id));
         params.put("year_of_degree", yearOfJoiningET.getText().toString().trim());
 
 
         JSONObject parameters = new JSONObject(params);
 
-        Log.d("Url hit was:",url);
+        Log.d("Url hit was:", url);
         JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,parameters,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         //Disimissing the progress dialog
                         loading.dismiss();
-                        //Showing toast message of the response
-                        String success= "Failed";
                         int user_id=0;
                         try {
-                            success = response.getString("success");
-                            user_id=response.getInt("user");
+                            JSONObject user = response.getJSONObject("user");
+                            if(user !=null){
+                                user_id=user.getInt("id");
+                                Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
+
+                                showComplaintsActivity(user_id);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
-                        Utility.showMsg(getApplicationContext(), "Signup : " + success + " | UserID : " + Integer.toString(user_id));
-                        showComplaintsActivity();
+                        Utility.showMsg(getApplicationContext(), response.toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -202,20 +261,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Dismissing the progress dialog
                         loading.dismiss();
                         //Showing toast
-                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(), "VOLLEY ERROR");//, Toast.LENGTH_LONG).show();
                     }
                 });
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
 
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        //Adding request to the queue
-        requestQueue.add(req);
     }
 
     private void uploadImage(){
         //Showing the progress dialog
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading Image...","Please wait...",false,false);
-        String url=LoginActivity.ip+"/api/pictures.json";
+        String url="http://"+Utility.IP+Utility.UPLOADIMAGE;
         Log.d("Url hit was:",url);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -224,16 +280,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Disimissing the progress dialog
                          loading.dismiss();
                         //Showing toast message of the response
+                        int pic_id=1;
                         try {
                             JSONObject res= new JSONObject(s);
                             JSONObject data=res.getJSONObject("data");
-                            int pic_id=data.getInt("id");
-                            System.out.println("pic_id : "+pic_id);
-                            uploadData(pic_id);
+                            pic_id=data.getInt("id");
+                            System.out.println("pic_id : " + pic_id);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Utility.showMsg(getApplicationContext(), s);
+                        uploadData(pic_id);
                     }
                 },
                 new Response.ErrorListener() {
@@ -242,7 +300,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Dismissing the progress dialog
                         loading.dismiss();
                         //Showing toast
+                        System.out.println("Image upload failed");
                         Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        uploadData(1);
                     }
                 }){
             @Override
@@ -257,39 +317,40 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 Map<String,String> params = new Hashtable<String, String>();
 
                 //Adding parameters
-                params.put("picture", image);
-                params.put("picture_title", name);
+                params.put("picture_name", image);
+                params.put("picture_caption", name);
 
                 //returning parameters
                 return params;
             }
         };
 
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(stringRequest);
     }
 
     boolean checkData() {           // TODO: 26/03/16
         if(usernameET.getText().toString().equals("")) {
             Utility.showMsg(this, "Enter User ID");
+            System.out.println("ENRYER UESER ID");
             return false;
         }
         if(passwordET.getText().toString().equals("")) {
             Utility.showMsg(this, "Enter password");
+            System.out.println("ENRYER PASS");
             return false;
         }
         if(fnameET.getText().toString().equals("")) {
             Utility.showMsg(this, "Enter First Name");
+            System.out.println("FIRST NAME MAMAU");
             return false;
         }
 
         if( !passwordET.getText().toString().trim().equals(confPasswordET.getText().toString().trim())) {
             Utility.showMsg(this, "Password and Confirm password do not match");
+            System.out.println("chutiya");
             return false;
         }
-        if(android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.getText().toString()).matches()) {
+        if(!isEmailValid(emailET.getText().toString())) {
             Utility.showMsg(this, "Enter valid email");
             return false;
         }
@@ -297,12 +358,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void signupUser() {             // TODO: 26/03/16
-        uploadImage();
+        if (FlagPicSelected){
+            uploadImage();
+        }
+        else{
+            uploadData(1);
+        }
+
 
     }
 
-    void showComplaintsActivity() {
+    void showComplaintsActivity(int user_id) {
         Intent it = new Intent(this, ComplaintsActivity.class);
+        it.putExtra("user_id",user_id);
         startActivity(it);
     }
 
@@ -314,6 +382,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.signup_asu:
                 if(checkData()) {
+
                     signupUser();
                 }
                 break;
@@ -333,5 +402,21 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
+    }
+
+
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+
     }
 }

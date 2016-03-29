@@ -17,12 +17,18 @@ import org.json.JSONObject;
 public class Utility {
     public static String IP="192.168.43.147:8000";
     public static String LOGIN_URL = "/user/login.json";
+    public static String HOSTELS = "/hostel_list.json";
+    public static String UPLOADIMAGE="/image/upload";
+    public static String UPLOADUSERDATA="/user/signup";
+    public static JSONObject USER=null;
+
     public static boolean DEBUG = true;
     public static JSONObject USER;
 
+
     public static void showMsg(Context ctx, String m)
     {
-        Toast.makeText(ctx, m, Toast.LENGTH_SHORT);
+        Toast.makeText(ctx, m, Toast.LENGTH_SHORT).show();
     }
 
 

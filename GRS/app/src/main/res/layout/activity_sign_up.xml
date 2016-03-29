@@ -82,13 +82,7 @@
             android:layout_height="wrap_content"
             android:hint="Last Name"/>
 
-        <EditText
-            android:id="@+id/uid_asu"
-            android:layout_width="300dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:hint="Entry Number/Employee ID"/>
+
 
         <EditText
             android:id="@+id/contact_asu"
