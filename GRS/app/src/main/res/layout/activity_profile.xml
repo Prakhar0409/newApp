@@ -202,6 +202,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:hint="Group Name"/>
+
+            <Button
+                android:id="@+id/join_button_ap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text = "JOIN"
+                android:layout_below="@id/group_input_ap"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"/>
         </RelativeLayout>
 
     </RelativeLayout>

@@ -135,31 +135,7 @@
 
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:text="Join Groups: "/>
-            <AutoCompleteTextView
-                android:id="@+id/resolving_right_asc"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:hint="Search groups"/>
-        </LinearLayout>
 
-        <ListView
-            android:id="@+id/resolving_right_listview_asc"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
-        </ListView>
 
         <Button
             android:id="@+id/signup_asu"
