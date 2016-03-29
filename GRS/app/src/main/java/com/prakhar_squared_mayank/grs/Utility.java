@@ -19,6 +19,7 @@ public class Utility {
     public static String LOGIN_URL = "/user/login.json";
     public static String HOSTELS = "/hostel_list.json";
     public static String UPLOADIMAGE="/image/upload";
+    public static String UPLOADUSERDATA="/user/signup";
     public static JSONObject USER=null;
 
     public static boolean DEBUG = true;
@@ -26,7 +27,7 @@ public class Utility {
 
     public static void showMsg(Context ctx, String m)
     {
-        Toast.makeText(ctx, m, Toast.LENGTH_SHORT);
+        Toast.makeText(ctx, m, Toast.LENGTH_SHORT).show();
     }
 
 
