@@ -1,16 +1,22 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,7 +38,7 @@ import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static String ip="http://192.168.43.172:8000";//"10.0.2.2:8000";
+    public static String ip="192.168.43.147:8000";//"10.0.2.2:8000";
 
 
     EditText useridET, passwordET;
@@ -52,6 +58,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         signupTV = (TextView) findViewById(R.id.signup_al);
         signupTV.setOnClickListener(this);
+
+        Utility.setupUI(LoginActivity.this,findViewById(R.id.loginView));
     }
 
     boolean checkData() {
@@ -67,28 +75,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     void loginUser() {
-        String url=ip+"/user/login.json";
+        String url="http://"+Utility.IP+Utility.LOGIN_URL;
 
         Map<String, String> params = new HashMap();
         params.put("username", useridET.getText().toString().trim());
         params.put("password", passwordET.getText().toString().trim());
-
         JSONObject parameters = new JSONObject(params);
         System.out.println("Url being hit is : " + url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String success="";
+                boolean success=false;
                 try {
-                    success= (String) response.get("success");
+                    success= (Boolean) response.getBoolean("success");
                     JSONObject user=null;
-                    if (success.equals("True")){
-                        user= (JSONObject) response.get("user");
-                        showComplaintsActivity(user);
+                    Log.d("success", "donno");
+                    if (success){
+                        Log.d("success", "true");
+                        user = response.getJSONObject("user");
+                        if(user != null){
+                            Log.d("user_null", "not null");
+                            showComplaintsActivity(user);
+                        }
+                    }else{
+                        Log.d("success", "false");
                     }
-
-
                 } catch (JSONException e) {
+                    Utility.showMsg(getApplicationContext(),"Login Failed");
                     e.printStackTrace();
                 }
                 System.out.println(response);
@@ -99,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                System.out.println("volley failed");
+                System.out.println("Volley failed");
             }
         }
         );
@@ -107,26 +120,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         v.add(req);
     }
 
-    //Shows toast with appropriate responses
-    public void showToast(String msg)
+    //function to hide keypad when screen is touched
+    public void hideKeyboard()
     {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
+
 
     void showComplaintsActivity(JSONObject user) {
         int user_id=0;
         try {
-            user_id= (int) user.get("id");
+            user_id= user.getInt("id");
+            Intent it = new Intent(this, ComplaintsActivity.class);
+            Log.d("next activity","yeah");
+            it.putExtra("user_id",user_id);
+            startActivity(it);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Intent it = new Intent(this, ComplaintsActivity.class);
-        it.putExtra("user_id",user_id);
-        startActivity(it);
     }
 
     public void changeIp(){
-
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -137,8 +155,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        ip=(String) editText.getText().toString().trim();
+                        Utility.IP=(String) editText.getText().toString().trim();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -153,21 +170,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         alert.show();
     }
 
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_al:
+                hideKeyboard();
                 if(checkData()) {
                     loginUser();
                 }
                 break;
             case R.id.signup_al:
+                hideKeyboard();
                 Intent it = new Intent(this, SignUpActivity.class);
                 startActivity(it);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,7 +208,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             default:
                 return super.onOptionsItemSelected(item);
         }
-
         //noinspection SimplifiableIfStatement
         return super.onOptionsItemSelected(item);
 
