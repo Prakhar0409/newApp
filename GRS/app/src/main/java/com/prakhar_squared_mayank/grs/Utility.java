@@ -26,17 +26,22 @@ import java.util.List;
  */
 public class Utility {
     public static String IP="192.168.43.147:8000";
-    public static String LOGIN_URL = "/user/login.json";
-    public static String HOSTELS = "/hostel_list.json";
-    public static String UPLOADIMAGE="/image/upload";
-    public static String UPLOADUSERDATA="/user/signup";
+    public static String LOGIN_URL = "/user/login.json",
+                         HOSTELS = "/hostel_list.json",
+                         UPLOADIMAGE="/image/upload",
+     DOWNLOADIMAGE="/image/download",
+     COMPLAINTDOMAINS="/complaint/domains",
+     COMPLAINTLEVELS="/complaint/levels",
+     UPLOADUSERDATA="/user/signup";
     public static String POSTSTATUS="/complaint/status";
     public static String POSTSTATUSCOMMENT="/status/comment";
     public static String GETSTATUSCOMMENT="complaint/status/comment";
     public static String POSTWALLCOMMENT="/complaint/comment";
-    public static String BOOKMARKCOMPLAINTS="";
     public static String MARKRESOLVED="complaint/mark_resolve";
-    public static String CHANGEBOOKMARKSTATUS="";
+    public static String BOOKMARKCOMPLAINTS="/complaint/comment";
+    public static String COMPLAINTDETAILS="/complaint/create";
+    public static String USERSNGROUPS="";
+
 
     public static JSONObject USER=null;
     public static List<ComplaintLevel> complaintLevels=null;
