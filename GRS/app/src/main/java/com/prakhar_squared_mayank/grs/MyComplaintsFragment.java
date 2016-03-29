@@ -34,7 +34,7 @@ import org.json.JSONObject;
  * Use the {@link MyComplaintsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyComplaintsFragment extends Fragment implements AdapterViewCompat.OnItemClickListener{
+public class MyComplaintsFragment extends Fragment {
     JSONArray data=null;
     private ListView complaintsLV;
     private ComplaintListAdapter complaintsAdapter;
@@ -120,22 +120,24 @@ public class MyComplaintsFragment extends Fragment implements AdapterViewCompat.
         complaintsAdapter.updateData(arr);
     }
 
-    @Override
-    public void onItemClick(AdapterViewCompat<?> parent, View view, int position, long id) {
-        Intent intent=new Intent(getActivity(),ComplaintDetailActivity.class);
-        JSONObject c= null;
-        try {
-            if (data!=null) {
-                c = (JSONObject) data.get(position);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(c!=null) {
-            intent.putExtra("Complaint", c.toString());
-            Log.d("Complaint Detailed", c.toString());
-            startActivity(intent);
-        }
 
-    }
+//    public void onItemClick(AdapterViewCompat<?> parent, View view, int position, long id) {
+//        Log.d("OnItemClickConcerning",Integer.toString(position));
+//
+//        Intent intent=new Intent(getActivity(),ComplaintDetailActivity.class);
+//        JSONObject c= null;
+//        try {
+//            if (data!=null) {
+//                c = (JSONObject) data.get(position);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        if(c!=null) {
+//            intent.putExtra("Complaint", c.toString());
+//            Log.d("Complaint Detailed", c.toString());
+//            startActivity(intent);
+//        }
+//
+//    }
 }

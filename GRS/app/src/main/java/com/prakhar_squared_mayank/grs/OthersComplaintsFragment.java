@@ -34,7 +34,7 @@ import org.json.JSONObject;
  * Use the {@link OthersComplaintsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OthersComplaintsFragment extends Fragment implements AdapterViewCompat.OnItemClickListener {
+public class OthersComplaintsFragment extends Fragment{         // implements AdapterViewCompat.OnItemClickListener {
     JSONArray data=null;
     private ListView complaintsLV;
     private ComplaintListAdapter complaintsAdapter;
@@ -105,17 +105,6 @@ public class OthersComplaintsFragment extends Fragment implements AdapterViewCom
         //v.add(req1);
         v.add(req2);
 
-//
-//
-//        String s = "[{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"},{\"complaint_id\":\"21\",\"title\": \"Problem title\",\"description\": \"Problem description\",\"posted_on\":\"23:30 25-10-2016\",\"image_id\":\"\",\"posted_by\": \"U123\",\"upvote_count\":\"38\",\"downvote_count\":\"2\",\"bookmarked\":\"true\"}]";
-//        JSONArray arr = null;
-//        try {
-//            arr = new JSONArray(s);
-//        }
-//        catch(JSONException e) {
-//
-//        }
-//        updateAdapter(arr);
     }
 
     //Shows toast with appropriate responses
@@ -130,22 +119,24 @@ public class OthersComplaintsFragment extends Fragment implements AdapterViewCom
         complaintsAdapter.updateData(arr);
     }
 
-    @Override
-    public void onItemClick(AdapterViewCompat<?> parent, View view, int position, long id) {
-        Intent intent=new Intent(getActivity(),ComplaintDetailActivity.class);
-        JSONObject c= null;
-        try {
-            if (data!=null) {
-                c = (JSONObject) data.get(position);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(c!=null) {
-            intent.putExtra("Complaint", c.toString());
-            Log.d("Complaint Detailed", c.toString());
-            startActivity(intent);
-        }
-
-    }
+//    @Override
+//    public void onItemClick(AdapterViewCompat<?> parent, View view, int position, long id) {
+//        Log.d("OnItemClickWork",Integer.toString(position));
+//
+//        Intent intent=new Intent(getActivity(),ComplaintDetailActivity.class);
+//        JSONObject c= null;
+//        try {
+//            if (data!=null) {
+//                c = (JSONObject) data.get(position);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        if(c!=null) {
+//            intent.putExtra("Complaint", c.toString());
+//            Log.d("Complaint Detailed", c.toString());
+//            startActivity(intent);
+//        }
+//
+//    }
 }

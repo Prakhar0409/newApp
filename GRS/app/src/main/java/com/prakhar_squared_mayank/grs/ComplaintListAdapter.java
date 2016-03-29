@@ -86,7 +86,7 @@ public class ComplaintListAdapter extends BaseAdapter {
             // and just get the holder you already made
             holder = (ViewHolder) convertView.getTag();
         }
-        JSONObject jsonObject = (JSONObject) getItem(position);
+        final JSONObject jsonObject = (JSONObject) getItem(position);
 
         String title = "";
         String desc = "";
@@ -125,24 +125,32 @@ public class ComplaintListAdapter extends BaseAdapter {
         holder.titleTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
+
+//                mContext.startActivity(it);
             }
         });
 
         holder.descTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
             }
         });
 
         holder.complaintPicIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
             }
         });
 

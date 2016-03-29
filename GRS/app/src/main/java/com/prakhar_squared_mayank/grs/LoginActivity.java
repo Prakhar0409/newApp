@@ -1,9 +1,15 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +30,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends ActionBarActivity implements View.OnClickListener {
     public static String ip="http://192.168.40.1:8000";//"10.0.2.2:8000";
 
     EditText useridET, passwordET;
@@ -97,9 +103,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         );
         RequestQueue v = Volley.newRequestQueue(this);
         v.add(req);
-
-
-
     }
 
     //Shows toast with appropriate responses
@@ -120,6 +123,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(it);
     }
 
+    public void changeIp(){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        ip=(String) editText.getText().toString().trim();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -132,5 +165,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent it = new Intent(this, SignUpActivity.class);
                 startActivity(it);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                break;
+            case R.id.action_change_ip:
+                changeIp();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        //noinspection SimplifiableIfStatement
+        return super.onOptionsItemSelected(item);
+
+
     }
 }
