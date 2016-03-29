@@ -91,6 +91,7 @@ public class BookmarksAdapter extends BaseAdapter {
         String desc = "";
         String upCount = "", downCount = "";
         String complaintID = "";
+        boolean bookmarked = true;
 
         if (jsonObject.has("complaint_title")) {
             title = (jsonObject.optString("complaint_title")).toUpperCase();
@@ -112,6 +113,15 @@ public class BookmarksAdapter extends BaseAdapter {
             complaintID = jsonObject.optString("complaint_id");
         }
 
+        if (jsonObject.has("bookmarked")) {
+            bookmarked = jsonObject.optBoolean("bookmarked");
+            if(bookmarked) {
+                holder.bookmarkIV.setImageResource(R.drawable.yes_bookmark);
+            }
+            else {
+                holder.bookmarkIV.setImageResource(R.drawable.not_bookmarked);
+            }
+        }
 
         holder.titleTV.setText(title);
         final int up = Integer.parseInt(upCount);
@@ -166,13 +176,7 @@ public class BookmarksAdapter extends BaseAdapter {
             }
         });
 
-        convertView.setOnTouchListener(new SwipeDetectorBA(holder, position));
-
         return convertView;
-    }
-
-    public void setListView(ListView view) {
-        listView = view;
     }
 
     private static class ViewHolder {
@@ -185,101 +189,5 @@ public class BookmarksAdapter extends BaseAdapter {
         public RelativeLayout mainView, hideView;
     }
 
-    public class SwipeDetectorBA implements View.OnTouchListener {
 
-        private static final int MIN_DISTANCE = 300;
-        private static final int MIN_LOCK_DISTANCE = 30; // disallow motion intercept
-        private boolean motionInterceptDisallowed = false;
-        private float downX, upX;
-        private ViewHolder holder;
-        private int position;
-        private boolean open = false;
-
-        public SwipeDetectorBA(ViewHolder h, int pos) {
-            holder = h;
-            position = pos;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN: {
-                    downX = event.getX();
-                    return true; // allow other events like Click to be processed
-                }
-
-                case MotionEvent.ACTION_MOVE: {
-                    upX = event.getX();
-                    Log.d("CLA", "" + upX);
-                    float deltaX = downX - upX;
-
-                    if (Math.abs(deltaX) > MIN_LOCK_DISTANCE && listView != null && !motionInterceptDisallowed) {
-                        listView.requestDisallowInterceptTouchEvent(true);
-                        motionInterceptDisallowed = true;
-                    }
-
-                    if (deltaX > 0) {
-                        holder.hideView.setVisibility(View.GONE);
-                    } else {
-                        // if first swiped left and then swiped right
-                        holder.hideView.setVisibility(View.VISIBLE);
-                    }
-
-                    if(!open) {
-                        if (deltaX < 0 && deltaX > -170) {
-                            swipe(-(int) deltaX);
-                        }
-                    } else {
-                        if (deltaX > 0 && deltaX < 170 && upX > 0) {
-                            swipe(-(int) deltaX);
-                        }
-                    }
-                    return true;
-                }
-
-                case MotionEvent.ACTION_UP:
-                    upX = event.getX();
-                    float deltaX = upX - downX;
-                    if (Math.abs(deltaX) >= 170) {
-                        // left or right
-//                        swipeRemove();
-                        open = true;
-                    } else {
-                        open = false;
-                        swipeBack();
-                    }
-
-                    if (listView != null) {
-                        listView.requestDisallowInterceptTouchEvent(false);
-                        motionInterceptDisallowed = false;
-                    }
-
-                    holder.hideView.setVisibility(View.VISIBLE);
-                    return true;
-
-                case MotionEvent.ACTION_CANCEL:
-                    holder.hideView.setVisibility(View.VISIBLE);
-                    return false;
-            }
-
-            return true;
-        }
-
-        private void swipeBack() {
-            swipe(0);
-        }
-
-        private void swipe(int distance) {
-            View animationView = holder.mainView;
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) animationView.getLayoutParams();
-            params.rightMargin = -distance;
-            params.leftMargin = distance;
-            animationView.setLayoutParams(params);
-        }
-
-//        private void swipeRemove() {
-//            remove(getItem(position));
-//            notifyDataSetChanged();
-//        }
-    }
 }

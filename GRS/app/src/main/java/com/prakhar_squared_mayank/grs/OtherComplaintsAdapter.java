@@ -114,6 +114,17 @@ public class OtherComplaintsAdapter extends BaseAdapter {
         }
 
 
+        boolean bookmarked = false;
+        if (jsonObject.has("bookmarked")) {
+            bookmarked = jsonObject.optBoolean("bookmarked");
+            if(bookmarked) {
+                holder.bookmarkIV.setImageResource(R.drawable.yes_bookmark);
+            }
+            else {
+                holder.bookmarkIV.setImageResource(R.drawable.not_bookmarked);
+            }
+        }
+
         holder.titleTV.setText(title);
         final int up = Integer.parseInt(upCount);
         final int down = Integer.parseInt(downCount);

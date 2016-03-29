@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.prakhar_squared_mayank.grs.BookmarksActivity">
 
+
     <ListView
         android:id="@+id/complaint_listview_ab"
         android:layout_width="match_parent"
@@ -12,5 +13,14 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp">
     </ListView>
+
+    <TextView
+        android:id="@+id/msg_ab"
+        android:layout_below="@id/complaint_listview_ab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Bookmarks."
+        android:layout_centerInParent="true"
+        android:textSize="25dp"/>
 
 </RelativeLayout>

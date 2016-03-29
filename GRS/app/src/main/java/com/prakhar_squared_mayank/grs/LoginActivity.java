@@ -32,7 +32,7 @@ import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static String ip="http://192.168.43.172:8000";//"10.0.2.2:8000";
+    public static String ip="http://192.168.43.147:8000";//"10.0.2.2:8000";
 
 
     EditText useridET, passwordET;
@@ -80,9 +80,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(JSONObject response) {
                 String success="";
                 try {
-                    success= (String) response.get("success");
+                    success= ""+ response.getBoolean("success");
                     JSONObject user=null;
-                    if (success.equals("True")){
+                    if (success.equals("true")){
                         user= (JSONObject) response.get("user");
                         showComplaintsActivity(user);
                     }

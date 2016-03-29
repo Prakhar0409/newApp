@@ -44,6 +44,7 @@ public class ComplaintDetailActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     JSONArray timelineData, commentData;
     TimelineFragment timeline;
+    ImageView bookmarkIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,8 @@ public class ComplaintDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        bookmarkIV = (ImageView) findViewById(R.id.bookmark_acd);
+
         try {
             getTimeLineData();
             timelineData = new JSONArray("[{\"status_id\"=\"2\",\"status_name\"=\"Received supplies\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done\"},{\"status_id\"=\"34\",\"status_name\"=\"Work almost done2\"}]");
@@ -91,9 +94,15 @@ public class ComplaintDetailActivity extends AppCompatActivity {
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
+    }
 
-//        getData();
-
+    public void setBookmark(boolean bookmarked) {
+        if(bookmarked) {
+            bookmarkIV.setImageResource(R.drawable.yes_bookmark);
+        }
+        else {
+            bookmarkIV.setImageResource(R.drawable.not_bookmarked);
+        }
     }
 
 
@@ -204,10 +213,6 @@ public class ComplaintDetailActivity extends AppCompatActivity {
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
-
-
-
 
     void getData() {
         try {
