@@ -20,11 +20,6 @@
         android:title="Bookmarks"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_request_validation"
-        android:orderInCategory="100"
-        android:title="Request Validation"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_validation_requests"
         android:orderInCategory="100"
         android:title="Validation Requests"

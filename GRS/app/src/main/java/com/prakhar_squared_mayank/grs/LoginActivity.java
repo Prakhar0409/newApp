@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static String ip="http://192.168.40.1:8000";//"10.0.2.2:8000";
+    public static String ip="http://192.168.43.172:8000";//"10.0.2.2:8000";
 
     EditText useridET, passwordET;
     TextView signupTV;
@@ -97,9 +97,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         );
         RequestQueue v = Volley.newRequestQueue(this);
         v.add(req);
-
-
-
     }
 
     //Shows toast with appropriate responses
