@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#66f5e5">
+        android:background="#9ce7ff">
         <TextView
             android:id="@+id/title_acd"
             android:textSize="22dp"
@@ -22,12 +22,12 @@
 
         <ImageView
             android:id="@+id/bookmark_acd"
-            android:layout_width="25dp"
-            android:background="#895764"
+            android:layout_width="30dp"
+            android:src="@drawable/not_bookmarked"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
-            android:layout_height="25dp" />
+            android:layout_height="30dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -62,12 +62,12 @@
 
                 <ImageView
                     android:id="@+id/up_image_acd"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:background="#289606"
                     android:layout_toLeftOf="@+id/up_count_acd"
                     android:layout_marginRight="5dp"
+                    android:src="@drawable/up_grey"
                     android:layout_marginBottom="10dp"/>
 
                 <TextView
@@ -83,11 +83,11 @@
 
                 <ImageView
                     android:id="@+id/down_image_acd"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/down_grey"
                     android:layout_centerVertical="true"
-                    android:background="#960b06"
                     android:layout_toLeftOf="@+id/down_count_acd"
                     android:layout_marginRight="5dp"/>
 

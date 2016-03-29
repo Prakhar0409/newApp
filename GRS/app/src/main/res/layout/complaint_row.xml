@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="#6ddbff">
+    android:background="#96e1fa">
 
     <RelativeLayout
         android:id="@+id/hide_view_cr"
@@ -32,7 +32,7 @@
         android:id="@+id/main_view_cr"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="#6ddbff">
+        android:background="#9ce7ff">
 
         <ImageView
             android:id="@+id/image_cr"
@@ -41,8 +41,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#478924"/>
+            android:src="@drawable/default_complaint_pic2"
+            android:layout_marginBottom="10dp"/>
 
         <ImageView
             android:id="@+id/bookmark_cr"
@@ -74,12 +74,12 @@
 
         <ImageView
             android:id="@+id/up_image_cr"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="#289606"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_toLeftOf="@+id/up_count_cr"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/up_grey"
             android:layout_alignParentBottom="true"/>
 
         <TextView
@@ -95,12 +95,12 @@
 
         <ImageView
             android:id="@+id/down_image_cr"
-            android:layout_width="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_height="20dp"
-            android:background="#960b06"
+            android:layout_width="40dp"
+            android:layout_marginBottom="0dp"
+            android:layout_height="40dp"
             android:layout_toLeftOf="@+id/down_count_cr"
             android:layout_marginRight="5dp"
+            android:src="@drawable/down_grey"
             android:layout_alignParentBottom="true"/>
 
         <TextView

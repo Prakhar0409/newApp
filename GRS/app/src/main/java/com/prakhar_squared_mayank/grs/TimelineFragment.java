@@ -1,6 +1,7 @@
 package com.prakhar_squared_mayank.grs;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,9 +19,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 
 /**
@@ -37,6 +48,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
     View mainView;
     JSONArray timelineData;
     ImageView fab;
+    int complaintID = -2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,14 +89,15 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         return mainView;
     }
 
-    public void updateTimeline(JSONArray arr) {
+    public void updateTimeline(JSONArray arr, int complaintid) {
         timelineData = arr;
+        complaintID = complaintid;
         makeTimeline();
     }
 
     public void makeTimeline() {
         clearLinearLayout();
-        String title1="Error with data.", id1="";
+        String title1="No data.", id1="";
         try {
             title1 = timelineData.getJSONObject(0).getString("status_name");
             id1 = timelineData.getJSONObject(0).getString("status_id");
@@ -94,19 +107,34 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         }
         TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
         titleTV.setText(title1);
+        final String title2=title1, id2=id1;
+        if(!title1.equals("No data.")) {
+            ImageView image = (ImageView) mainView.findViewById(R.id.image_ft);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("TF", "Go to detailed status");
+                    Intent it = new Intent(getActivity(), StatusDetailActivity.class);
+                    it.putExtra("STATUS_ID", id2);
+                    it.putExtra("STATUS_NAME", title2);
+                    getActivity().startActivity(it);
+                }
+            });
+        }
 
 
         for(int index = 1;index < timelineData.length();index++) {
             Log.d("TimelineFragment", "Adding timeline event");
-            String title="Error with data.", id="";
+            String title="Error with data.", id="", desc="";
             try {
                 title = timelineData.getJSONObject(index).getString("status_name");
                 id = timelineData.getJSONObject(index).getString("status_id");
+                desc = timelineData.getJSONObject(index).getString("detailed_status");
             }
             catch (JSONException e) {
 
             }
-            addChildLayout(title, id);
+            addChildLayout(title, id, desc);
         }
     }
 
@@ -115,7 +143,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         linearLayout.removeAllViewsInLayout();
     }
 
-    public void addChildLayout(final String title, final String id){
+    public void addChildLayout(final String title, final String id, final String desc){
 
         LayoutInflater layoutInflater=(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -130,9 +158,11 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("TF", "Go to detailed status");
                 Intent it = new Intent(getActivity(), StatusDetailActivity.class);
                 it.putExtra("STATUS_ID", id);
                 it.putExtra("STATUS_NAME", title);
+                it.putExtra("STATUS_DESC", desc);
                 getActivity().startActivity(it);
             }
         });
@@ -159,6 +189,46 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
+    void postNewStatus(final String status) {
+        final ProgressDialog loading = ProgressDialog.show(getActivity(),"Uploading Status...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.POSTSTATUS;
+        Log.d("Url hit was:",url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getActivity(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("complaint_id_", complaintID+"");
+                params.put("status_name", status);
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        volleySingleton.getInstance(getActivity()).getRequestQueue().add(stringRequest);
+    }
+
     void addNewStatus() {
         Log.d("Timeline fragment", "New Status");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -179,6 +249,9 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         builder.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(complaintID != -2) {
+                    postNewStatus(input2.getText().toString());
+                }
                 dialog.cancel();
             }
         });

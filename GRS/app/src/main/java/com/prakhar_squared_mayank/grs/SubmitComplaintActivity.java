@@ -60,7 +60,7 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_submit_complaint);
 
 
-        domainACT = (AutoCompleteTextView) findViewById(R.id.domain_asc);
+//        domainACT = (AutoCompleteTextView) findViewById(R.id.domain_asc);
         resolveACT = (AutoCompleteTextView) findViewById(R.id.resolving_right_asc);
         titleTV = (TextView) findViewById(R.id.title_asc);
         descTV = (TextView) findViewById(R.id.desc_asc);

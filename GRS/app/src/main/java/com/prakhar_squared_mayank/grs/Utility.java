@@ -30,13 +30,15 @@ public class Utility {
     public static String HOSTELS = "/hostel_list.json";
     public static String UPLOADIMAGE="/image/upload";
     public static String UPLOADUSERDATA="/user/signup";
-    public static String DOWNLOADIMAGE="/image/download";
-    public static String COMPLAINTLEVELS="/complaint/levels";
-    public static String COMPLAINTDOMAINS="/complaint/domains";
+    public static String POSTSTATUS="/complaint/status";
+    public static String POSTSTATUSCOMMENT="/status/comment";
+    public static String GETSTATUSCOMMENT="complaint/status/comment";
+    public static String POSTWALLCOMMENT="/complaint/comment";
+    public static String BOOKMARKCOMPLAINTS="/complaint/comment";
+
     public static JSONObject USER=null;
     public static List<ComplaintLevel> complaintLevels=null;
     public static boolean DEBUG = true;
-
 
 
     public static void showMsg(Context ctx, String m)
