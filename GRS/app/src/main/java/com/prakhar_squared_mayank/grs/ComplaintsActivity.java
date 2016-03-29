@@ -131,75 +131,7 @@ public class ComplaintsActivity extends AppCompatActivity {
 
 
     public void getData(){
-        String url1=LoginActivity.ip+"/complaints/concerning/"+user_id+".json";
 
-        System.out.println("Url being hit is : " + url1);
-        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                String success="";
-                try {
-                    success= (String) response.get("success");
-                    JSONArray data= (JSONArray) response.get("data");
-                    if(success.equals("True")){
-                        showToast("Data Fetched!");
-                    }else{
-                        showToast("Fetch data failed");
-                    }
-                    for (int i=0;i<data.length();i++){
-                        System.out.println("data "+Integer.toString(i)+" : "+data.get(i));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("data1111 : "+response);
-                System.out.println(success);
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                System.out.println("volley failed");
-            }
-        }
-        );
-        String url2=LoginActivity.ip+"/complaints/work/"+"3"+".json";
-        System.out.println("Url being hit is : " + url1);
-
-        JsonObjectRequest req2 = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                String success="";
-                try {
-                    success= (String) response.get("success");
-                    JSONArray data= (JSONArray) response.get("data");
-                    if(success.equals("True")){
-                        showToast("Data2 Fetched!");
-                    }else{
-                        showToast("Fetch data2 failed");
-                    }
-                    for (int i=0;i<data.length();i++){
-                        System.out.println("222data "+Integer.toString(i)+" : "+data.get(i));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("DATA22222 : "+response);
-                System.out.println(success);
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                System.out.println("volley failed");
-            }
-        }
-        );
-        RequestQueue v = Volley.newRequestQueue(this);
-        v.add(req1);
-        v.add(req2);
 
     }
 

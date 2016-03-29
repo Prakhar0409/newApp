@@ -20,16 +20,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by mayank on 27/03/16.
+ * Created by Prakhar on 29/03/16.
  */
-public class ComplaintListAdapter extends BaseAdapter {
+public class OtherComplaintsAdapter extends BaseAdapter {
 
     Context mContext;
     LayoutInflater mInflater;
     JSONArray mJsonArray;
     ListView listView;
 
-    public ComplaintListAdapter(Context context, LayoutInflater inflater) {
+    public OtherComplaintsAdapter(Context context, LayoutInflater inflater) {
         mContext = context;
         mInflater = inflater;
         mJsonArray = new JSONArray();
@@ -168,7 +168,7 @@ public class ComplaintListAdapter extends BaseAdapter {
         });
 
         convertView.setOnTouchListener(new SwipeDetector(holder, position));
-        
+
         return convertView;
     }
 

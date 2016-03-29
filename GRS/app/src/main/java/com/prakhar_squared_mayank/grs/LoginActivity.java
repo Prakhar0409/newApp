@@ -73,10 +73,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String success="";
                 try {
                     success= (String) response.get("success");
-                    JSONObject user= (JSONObject) response.get("user");
-                    if(success.equals("True")){
+                    JSONObject user=null;
+                    if (success.equals("True")){
+                        user= (JSONObject) response.get("user");
                         showComplaintsActivity(user);
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
