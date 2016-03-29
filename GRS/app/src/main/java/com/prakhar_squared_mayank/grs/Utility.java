@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 /**
  * Created by mayank on 26/03/16.
  */
@@ -16,6 +18,7 @@ public class Utility {
     public static String IP="192.168.43.147:8000";
     public static String LOGIN_URL = "/user/login.json";
     public static boolean DEBUG = true;
+    public static JSONObject USER;
 
     public static void showMsg(Context ctx, String m)
     {

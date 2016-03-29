@@ -33,6 +33,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +61,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         signupTV = (TextView) findViewById(R.id.signup_al);
         signupTV.setOnClickListener(this);
+
+        CookieManager manager = new CookieManager( null, CookiePolicy.ACCEPT_ALL );
+        CookieHandler.setDefault(manager);
 
         Utility.setupUI(LoginActivity.this,findViewById(R.id.loginView));
     }

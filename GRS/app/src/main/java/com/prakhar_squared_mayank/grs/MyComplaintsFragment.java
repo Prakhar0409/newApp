@@ -65,7 +65,7 @@ public class MyComplaintsFragment extends Fragment {
     }
 
     void getData() {
-        String url1=LoginActivity.ip+"/complaints/concerning/"+((ComplaintsActivity)getActivity()).user_id+".json";
+        String url1="http://"+LoginActivity.ip+"/complaint/complaints/concern";
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
@@ -73,10 +73,8 @@ public class MyComplaintsFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 String success="";
                 try {
-                    success= (String) response.get("success");
 
-                    success= (String) response.get("success");
-                    if(success.equals("True")){
+                    if(response.has("data") && !response.isNull("data")){
                         data = (JSONArray) response.get("data");
                         showToast("Data Fetched!");
                         for (int i=0;i<data.length();i++){

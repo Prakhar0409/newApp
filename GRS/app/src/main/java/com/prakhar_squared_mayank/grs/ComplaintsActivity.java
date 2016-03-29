@@ -52,7 +52,7 @@ public class ComplaintsActivity extends AppCompatActivity {
     Menu menu;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,8 @@ public class ComplaintsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (CustomViewPager) findViewById(R.id.viewpager);
+        viewPager.setPagingEnabled(false);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);

@@ -126,6 +126,12 @@ public class ComplaintListAdapter extends BaseAdapter {
         }
 
         holder.titleTV.setText(title);
+        if(upCount.equals("null")) {
+            upCount = "0";
+        }
+        if(downCount.equals("null")) {
+            downCount = "0";
+        }
         final int up = Integer.parseInt(upCount);
         final int down = Integer.parseInt(downCount);
 
