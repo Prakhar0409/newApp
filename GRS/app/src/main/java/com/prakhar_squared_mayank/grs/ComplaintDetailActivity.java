@@ -309,14 +309,14 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     void setTimeline() {
         Log.d("CDA", "Setting timeline "+timelineData.toString());
         if(timeline != null && timelineData != null) {
-            timeline.updateTimeline(timelineData);
+            timeline.updateTimeline(timelineData, complaintID);
         }
     }
 
     void setWall() {
         Log.d("CDA", "Setting wall "+commentData.toString());
         if(wallF != null && commentData != null) {
-            wallF.updateWall(commentData);
+            wallF.updateWall(commentData, complaintID);
         }
     }
 

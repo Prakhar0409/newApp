@@ -1,19 +1,34 @@
 package com.prakhar_squared_mayank.grs;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 
 /**
@@ -24,11 +39,13 @@ import org.json.JSONException;
  * Use the {@link WallFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WallFragment extends Fragment {
+public class WallFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private String wallDataString;
     View mainView;
     JSONArray wallData;
+    ImageView fab;
+    int complaintID = -2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,14 +79,17 @@ public class WallFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_wall, container, false);
+        fab = (ImageView) mainView.findViewById(R.id.fab_fw);
+        fab.setOnClickListener(this);
 
         makeComments();
 
         return mainView;
     }
 
-    public void updateWall(JSONArray arr) {
+    public void updateWall(JSONArray arr, int complaintid) {
         wallData = arr;
+        complaintID = complaintid;
         makeComments();
     }
 
@@ -110,7 +130,44 @@ public class WallFragment extends Fragment {
         linearLayout.addView(view);
         Log.d("TimelineFragment", "Count now: " + linearLayout.getChildCount());
 
-//        linearLayout.add
+    }
+
+
+    void addNewWallComment() {
+        Log.d("Wall fragment", "New Comment");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Comment");
+
+        final LinearLayout ll = new LinearLayout(getActivity());
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(15, 5, 15, 5);
+        final TextView tv = new TextView(getActivity());
+        tv.setText("Wall Comment:");
+        final EditText input2 = new EditText(getActivity());
+        input2.setInputType(InputType.TYPE_CLASS_TEXT);
+        input2.setHint("Enter comment here");
+
+        ll.addView(input2);
+        builder.setView(ll);
+
+        builder.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(complaintID != -2) {
+                    postNewComment(input2.getText().toString());
+                }
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -135,6 +192,56 @@ public class WallFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+    void postNewComment(final String commentM) {
+        final ProgressDialog loading = ProgressDialog.show(getActivity(),"Uploading Status...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.POSTWALLCOMMENT;
+        Log.d("Url hit was:", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getActivity(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("complaint_id", complaintID+"");
+                params.put("comment_made", commentM);
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        volleySingleton.getInstance(getActivity()).getRequestQueue().add(stringRequest);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.fab_fw:
+                addNewWallComment();
+                break;
+        }
     }
 
     /**

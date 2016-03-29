@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,6 +38,8 @@ import org.json.JSONObject;
 public class MyComplaintsFragment extends Fragment {
     JSONArray data=null;
     private ListView complaintsLV;
+    TextView message;
+
     private ComplaintListAdapter complaintsAdapter;
 
     public MyComplaintsFragment() {
@@ -59,6 +62,9 @@ public class MyComplaintsFragment extends Fragment {
         complaintsLV.setAdapter(complaintsAdapter);
         complaintsAdapter.setListView(complaintsLV);
 
+
+        message = (TextView) v.findViewById(R.id.msg_fmc);
+        message.setText("Loading Data...");
 
         getData();
         return v;
@@ -97,6 +103,7 @@ public class MyComplaintsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                message.setText("Loading Failed.");
                 System.out.println("volley failed");
             }
         }
@@ -115,6 +122,12 @@ public class MyComplaintsFragment extends Fragment {
 
     void updateAdapter(JSONArray arr) {
         Log.d("mycomplaintsfragment", arr.toString());
+        if(arr.length() == 0) {
+            message.setText("No Complaints.");
+            message.setVisibility(View.VISIBLE);
+        } else {
+            message.setVisibility(View.INVISIBLE);
+        }
         complaintsAdapter.updateData(arr);
     }
 

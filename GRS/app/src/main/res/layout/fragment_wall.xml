@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
+    android:background="#ffcfad"
     tools:context="com.prakhar_squared_mayank.grs.WallFragment">
 
     <LinearLayout
@@ -9,7 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#920398">
+        android:background="#ffcfad">
     </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/fab_fw"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/plus" />
 
 </FrameLayout>
