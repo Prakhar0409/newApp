@@ -1,5 +1,6 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -166,8 +167,16 @@ public class ComplaintsActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if(id==R.id.action_profile){
+        }
+        else if(id==R.id.action_profile){
             //changeImage();
+            Intent it = new Intent(this, ProfileActivity.class);
+            startActivity(it);
+            return true;
+        }
+        else if(id==R.id.action_validation_requests){
+            Intent it = new Intent(this, ValidationRequestActivity.class);
+            startActivity(it);
             return true;
         }
 
