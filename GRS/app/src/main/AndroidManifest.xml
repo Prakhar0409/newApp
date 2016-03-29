@@ -33,7 +33,9 @@
         <activity android:name=".ComplaintDetailActivity" />
         <activity android:name=".StatusDetailActivity" />
         <activity android:name=".SubmitComplaintActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".BookmarksActivity" />
+        <activity android:name=".NotificationsActivity"></activity>
     </application>
 
 </manifest>

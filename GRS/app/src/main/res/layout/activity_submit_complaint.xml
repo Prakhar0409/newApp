@@ -1,12 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.prakhar_squared_mayank.grs.SubmitComplaintActivity">
+    android:layout_height="match_parent" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        tools:context="com.prakhar_squared_mayank.grs.SubmitComplaintActivity">
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complaint Level"
+            android:textSize="21dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+        <AutoCompleteTextView
+            android:id="@+id/level_asc"
+            android:layout_width="250dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"/>
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="290dp"
+            android:layout_height="1dp"
+            android:background="#201956"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complaint Domain"
+            android:textSize="21dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
+        <AutoCompleteTextView
+            android:id="@+id/domain_asc"
+            android:layout_width="250dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"/>
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="290dp"
+            android:layout_height="1dp"
+            android:background="#201956"
+            android:layout_marginTop="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Title: "/>
+            <EditText
+                android:id="@+id/title_asc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="97dp"
+                android:layout_weight="1"
+                android:hint="Title"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Description: "/>
+            <EditText
+                android:id="@+id/desc_asc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="41dp"
+                android:hint="Describe the complaint"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/pic_frame_asc"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="150dp">
+            <ImageView
+                android:id="@+id/pic_asc"
+                android:src="@drawable/default_complaint_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginLeft="1.5dp"
+                android:paddingLeft="0dp"
+                android:layout_gravity="bottom"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:text="Add Complaint Pic?"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:background="#a8000000"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Resolving Rights: "/>
+            <AutoCompleteTextView
+                android:id="@+id/resolving_right_asc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search for people/group"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/resolving_right_listview_asc"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp">
+        </ListView>
+
+    </LinearLayout>
+</ScrollView>

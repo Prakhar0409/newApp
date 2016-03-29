@@ -179,6 +179,16 @@ public class ComplaintsActivity extends AppCompatActivity {
             startActivity(it);
             return true;
         }
+        else if(id==R.id.action_bookmarks){
+            Intent it = new Intent(this, BookmarksActivity.class);
+            startActivity(it);
+            return true;
+        }
+        else if(id==R.id.action_notifs){
+            Intent it = new Intent(this, NotificationsActivity.class);
+            startActivity(it);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
