@@ -121,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     public void getData(){
         String url="http://"+Utility.IP+Utility.HOSTELS;
-        final ProgressDialog loading = ProgressDialog.show(this,"Fetching data...","Please wait...",false,false);
+        final ProgressDialog loading = ProgressDialog.show(this, "Fetching data...", "Please wait...", false, false);
         Log.d("Url hit was:", url);
         JsonObjectRequest req= new JsonObjectRequest(Request.Method.GET, url,null,
                 new Response.Listener<JSONObject>() {
@@ -181,19 +181,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         FlagPicSelected =true;
     }
 
-
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if(bmp==null){
-            Log.d("NULL BMP","NULL");
-        }
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
-
-    public void uploadData(int pic_id){
+    public void uploadData(final int pic_id){
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
         String url="http://"+Utility.IP+Utility.UPLOADUSERDATA;
         Map<String, String> params = new HashMap();
@@ -214,9 +202,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 e.printStackTrace();
             }
         }
-
-
-
         params.put("first_name", fnameET.getText().toString().trim());
         params.put("last_name", lnameET.getText().toString().trim());
         params.put("username", usernameET.getText().toString().trim());
@@ -229,10 +214,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //params.put("degree_name", degree);
         params.put("picture_id", Integer.toString(pic_id));
         params.put("year_of_degree", yearOfJoiningET.getText().toString().trim());
-
-
         JSONObject parameters = new JSONObject(params);
-
         Log.d("Url hit was:", url);
         JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,parameters,
                 new Response.Listener<JSONObject>() {
@@ -247,7 +229,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 user_id=user.getInt("id");
                                 Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
 
-                                showComplaintsActivity(user_id);
+                                showComplaintsActivity(user_id,pic_id);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -308,7 +290,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
-                String image = getStringImage(scaledBitmap);
+                String image = Utility.getStringImage(scaledBitmap);
 
                 //Getting Image Name
                 String name = "profilePic."+usernameET.getText().toString().trim();
@@ -368,9 +350,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    void showComplaintsActivity(int user_id) {
+    void showComplaintsActivity(int user_id,int pic_id) {
         Intent it = new Intent(this, ComplaintsActivity.class);
         it.putExtra("user_id",user_id);
+        it.putExtra("pic_id",pic_id);
         startActivity(it);
     }
 
@@ -382,7 +365,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.signup_asu:
                 if(checkData()) {
-
                     signupUser();
                 }
                 break;

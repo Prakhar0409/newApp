@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newComplaintView"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <LinearLayout
@@ -20,12 +21,20 @@
             android:textSize="21dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"/>
-        <AutoCompleteTextView
+
+        <Spinner
             android:id="@+id/level_asc"
             android:layout_width="250dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"/>
+            android:prompt="@string/spinner_title"/>
+
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/level_asc"-->
+            <!--android:layout_width="250dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dp"/>-->
         <ImageView
             android:layout_gravity="center"
             android:layout_width="290dp"
@@ -40,12 +49,23 @@
             android:textSize="21dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"/>
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/domain_asc"
             android:layout_width="250dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"/>
+            android:prompt="@string/spinner_title"/>
+
+
+
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/domain_asc"-->
+            <!--android:layout_width="250dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dp"/>-->
+        <!-- -->
+
         <ImageView
             android:layout_gravity="center"
             android:layout_width="290dp"

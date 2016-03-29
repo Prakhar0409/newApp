@@ -2,6 +2,12 @@ package com.prakhar_squared_mayank.grs;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +16,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by mayank on 26/03/16.
@@ -20,10 +30,13 @@ public class Utility {
     public static String HOSTELS = "/hostel_list.json";
     public static String UPLOADIMAGE="/image/upload";
     public static String UPLOADUSERDATA="/user/signup";
+    public static String DOWNLOADIMAGE="/image/download";
+    public static String COMPLAINTLEVELS="/complaint/levels";
+    public static String COMPLAINTDOMAINS="/complaint/domains";
     public static JSONObject USER=null;
-
+    public static List<ComplaintLevel> complaintLevels=null;
     public static boolean DEBUG = true;
-    public static JSONObject USER;
+
 
 
     public static void showMsg(Context ctx, String m)
@@ -55,6 +68,20 @@ public class Utility {
             }
         }
     }
+
+
+    public static String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if(bmp==null){
+            Log.d("NULL BMP","NULL");
+        }
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+
 
 
 }

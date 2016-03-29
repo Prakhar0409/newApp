@@ -1,65 +1,101 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.internal.widget.AdapterViewCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class SubmitComplaintActivity extends AppCompatActivity {
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
+public class SubmitComplaintActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener{
     AutoCompleteTextView levelACT, domainACT, resolveACT;
+    int lev;
+    Spinner complaintLevels,complaintDomains;
+    List<ComplaintDomain> Domains;
     TextView titleTV, descTV;
     ImageView picIV;
+    FrameLayout picFL;
+    Bitmap scaledBitmap=null;
     ListView resolveLV;
     String levelSelected="", domainSelected="";
+    boolean FlagPicSelected=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_complaint);
 
-        levelACT = (AutoCompleteTextView) findViewById(R.id.level_asc);
+
         domainACT = (AutoCompleteTextView) findViewById(R.id.domain_asc);
         resolveACT = (AutoCompleteTextView) findViewById(R.id.resolving_right_asc);
         titleTV = (TextView) findViewById(R.id.title_asc);
         descTV = (TextView) findViewById(R.id.desc_asc);
-        picIV = (ImageView) findViewById(R.id.pic_asc);
+
         resolveLV = (ListView) findViewById(R.id.resolving_right_listview_asc);
+
+        picIV = (ImageView) findViewById(R.id.pic_asc);
+        picFL = (FrameLayout) findViewById(R.id.pic_frame_asc);
+        picFL.setOnClickListener(this);
+
+
+        complaintLevels= (Spinner) findViewById(R.id.level_asc);
+
+        // Spinner click listener
+        complaintLevels.setOnItemSelectedListener(this);
+
+        complaintDomains= (Spinner) findViewById(R.id.domain_asc);
+
+        // Spinner click listener
+        complaintDomains.setOnItemSelectedListener(this);
+
+        getData();
+        Utility.setupUI(SubmitComplaintActivity.this, findViewById(R.id.newComplaintView));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.submit_complaint_menu, menu);
-
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_submit_scm) {
-            if(checkData()) {
-                submitComplaint();
-            }
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     boolean checkData() {
+
         if(domainSelected.equals("")) {
             Utility.showMsg(this, "Select complaint domain.");
             return false;
@@ -80,6 +116,303 @@ public class SubmitComplaintActivity extends AppCompatActivity {
     }
 
     void submitComplaint() {
+        if (FlagPicSelected){
+            uploadImage();
+        }else{
+            uploadData(2);
+        }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.action_submit_scm:
+                if(true){//checkData()) {
+                    submitComplaint();
+                }
+                break;
+            case R.id.pic_frame_asc:
+                selectUserPic();
+                break;
+        }
+    }
+
+
+    void selectUserPic() {
+        Intent intent = new Intent();
+        // Show only images, no videos or anything else
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        // Always show the chooser (if there are multiple options available)
+        startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                Log.d("SignUp", String.valueOf(bitmap));
+                int nh = (int) ( bitmap.getHeight() * (256.0 / bitmap.getWidth()) );
+                scaledBitmap = Bitmap.createScaledBitmap(bitmap, 256, nh, true);
+                picIV.setImageBitmap(scaledBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        FlagPicSelected =true;
+    }
+
+
+
+    public void uploadData(final int pic_id){
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.UPLOADUSERDATA;
+        Map<String, String> params = new HashMap();
+
+        params.put("title", titleTV.getText().toString().trim());
+        params.put("description", descTV.getText().toString().trim());
+        try {
+            params.put("posted_by", Integer.toString(Utility.USER.getInt("id")));
+        } catch (JSONException e) {
+            Log.d("Error","User not retrieveable from Utility");
+            e.printStackTrace();
+        }
+        params.put("image_id", Integer.toString(pic_id));
+        //params.put("level_id", Integer.toString(level_id));
+
+        JSONObject parameters = new JSONObject(params);
+        Log.d("Url hit was:", url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,parameters,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        int user_id=0;
+                        try {
+                            JSONObject user = response.getJSONObject("user");
+                            if(user !=null){
+                                user_id=user.getInt("id");
+                                Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
+
+                                showComplaintsActivity(user_id,pic_id);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Utility.showMsg(getApplicationContext(), response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), "VOLLEY ERROR");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+        //hostelList.add("None");
+        for(int i=0;i<Utility.complaintLevels.size();i++){
+            ComplaintLevel c=Utility.complaintLevels.get(i);
+            if(c.getLevel_name().equals(item)){
+                lev=c.getId();
+                break;
+            }
+
+        }
+        getDomains();
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+    }
+
+
+    private void uploadImage(){
+        //Showing the progress dialog
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading Image...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.UPLOADIMAGE;
+        Log.d("Url hit was:", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        int pic_id=2;
+                        try {
+                            JSONObject res= new JSONObject(s);
+                            JSONObject data=res.getJSONObject("data");
+                            pic_id=data.getInt("id");
+                            System.out.println("pic_id : " + pic_id);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Utility.showMsg(getApplicationContext(), s);
+                        uploadData(pic_id);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        System.out.println("Image upload failed");
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        uploadData(1);
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                String image = Utility.getStringImage(scaledBitmap);
+                String name = "complaintPic."+titleTV.getText().toString().trim();
+                Map<String,String> params = new Hashtable<String, String>();
+                params.put("picture_name", image);
+                params.put("picture_caption", name);
+                return params;
+            }
+        };
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(stringRequest);
+    }
+
+
+    void showComplaintsActivity(int user_id,int pic_id) {
+        Intent it = new Intent(this, ComplaintsActivity.class);
+        it.putExtra("user_id",user_id);
+        it.putExtra("pic_id", pic_id);
+        startActivity(it);
+    }
+
+    public void setComplaintLevelSpinner() {
+        List<String> complaintsLevelNames= new ArrayList<String>();
+
+        for(int i=0; i < Utility.complaintLevels.size() ;i++) {
+            complaintsLevelNames.add(Utility.complaintLevels.get(i).getLevel_name());
+        }
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, complaintsLevelNames);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        complaintLevels.setAdapter(dataAdapter);
+    }
+
+    public void setDomainSpinner() {
+        List<String> complaintsDomainNames= new ArrayList<String>();
+
+        for(int i=0; i < Utility.complaintLevels.size() ;i++) {
+            complaintsDomainNames.add(Domains.get(i).complaintDomainName);
+        }
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, complaintsDomainNames);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        complaintDomains.setAdapter(dataAdapter);
+    }
+
+
+    public void getDomains(){
+        String url="http://"+Utility.IP+Utility.COMPLAINTDOMAINS+"?level_id="+Integer.toString(lev);
+        final ProgressDialog loading = ProgressDialog.show(this, "Fetching data...", "Please wait...", false, false);
+        Log.d("Url hit was:", url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        JSONArray domainsJson;
+                        try {
+                            domainsJson=response.getJSONArray("data");
+                            System.out.println(domainsJson);
+                            for(int i=0;i<domainsJson.length();i++){
+                                ComplaintDomain c=new ComplaintDomain();
+                                c.id=domainsJson.getJSONObject(i).getInt("id");
+                                c.complaintDomainName=domainsJson.getJSONObject(i).getString("complaint_domain_name");
+                                c.level_id=lev;
+                                if(Domains==null){Domains=new ArrayList<ComplaintDomain>();}
+                                Domains.add(c);
+                            }
+                            setDomainSpinner();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
+    }
+
+
+    public void getData(){
+        String url="http://"+Utility.IP+Utility.COMPLAINTLEVELS;
+        final ProgressDialog loading = ProgressDialog.show(this, "Fetching data...", "Please wait...", false, false);
+        Log.d("Url hit was:", url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        JSONArray levelsJson;
+                        try {
+                            levelsJson=response.getJSONArray("data");
+                            System.out.println(levelsJson);
+                            for(int i=0;i<levelsJson.length();i++){
+                                ComplaintLevel c=new ComplaintLevel();
+                                c.setId(levelsJson.getJSONObject(i).getInt("id"));
+                                c.setLevel_name(levelsJson.getJSONObject(i).getString("complaint_level_name"));
+                                if(Utility.complaintLevels==null){Utility.complaintLevels=new ArrayList<ComplaintLevel>();}
+                                Utility.complaintLevels.add(c);
+                            }
+                            setComplaintLevelSpinner();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 }

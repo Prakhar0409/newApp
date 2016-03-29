@@ -72,13 +72,13 @@ public class ComplaintsActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        getImageString(16);
-        getData();
+        getImageString(6);
+
 
     }
 
     public void getImageString(int id){
-        String url=LoginActivity.ip+"/api/pictures/id/"+Integer.toString(id)+".json";
+        String url="http://"+Utility.IP+Utility.DOWNLOADIMAGE+"?image_id="+Integer.toString(id);
         Log.d("Url hit was:", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -89,13 +89,14 @@ public class ComplaintsActivity extends AppCompatActivity {
                         //Showing toast message of the response
                         try {
                             JSONObject res= new JSONObject(s);
-                            JSONArray data=res.getJSONArray("data");
-                            JSONObject imageObject=data.getJSONObject(0);
+
+                            JSONObject imageObject=res.getJSONObject("image");
                             if (imageObject!=null){
-                                imageString = imageObject.getString("picture");
+                                imageString = imageObject.getString("picture_name");
                                 System.out.println("imageString : "+imageString);
+                                changeImage(imageString);
                             }
-                            changeImage(imageString);
+
 
                             showToast("Success ful image chuityapa");
                         } catch (JSONException e) {
@@ -110,7 +111,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                         //Dismissing the progress dialog
                         //loading.dismiss();
                         //Showing toast
-                        showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(),"volley error");//, Toast.LENGTH_LONG).show();
                     }
                 });
         //Creating a Request Queue
@@ -132,10 +133,6 @@ public class ComplaintsActivity extends AppCompatActivity {
     }
 
 
-    public void getData(){
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,6 +184,11 @@ public class ComplaintsActivity extends AppCompatActivity {
         }
         else if(id==R.id.action_notifs){
             Intent it = new Intent(this, NotificationsActivity.class);
+            startActivity(it);
+            return true;
+        }
+        else if(id==R.id.action_new_complaint){
+            Intent it = new Intent(this, SubmitComplaintActivity.class);
             startActivity(it);
             return true;
         }
