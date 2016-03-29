@@ -2,6 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signupView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -105,13 +106,24 @@
             android:layout_height="wrap_content"
             android:hint="Email ID"/>
 
-        <EditText
+
+        <Spinner
             android:id="@+id/hostel_asu"
             android:layout_width="300dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:hint="Hostel"/>
+            android:prompt="@string/spinner_title"/>
+
+
+        <!--<EditText-->
+            <!--android:id="@+id/hostel_asu"-->
+            <!--android:layout_width="300dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Hostel"/>-->
+
 
         <EditText
             android:id="@+id/year_of_joining_asu"

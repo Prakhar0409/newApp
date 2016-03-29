@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,16 +30,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener {
     EditText usernameET, passwordET, confPasswordET, hostelET,yearOfJoiningET;
     EditText fnameET, lnameET, uidET, contactET, emailET;
     Button signUpButton;
@@ -44,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     ImageView profilePicIV;
     FrameLayout profilePicFL;
     Bitmap scaledBitmap;
+    Spinner hostels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         usernameET = (EditText) findViewById(R.id.username_asu);
         passwordET = (EditText) findViewById(R.id.pass_asu);
         confPasswordET = (EditText) findViewById(R.id.conf_pass_asu);
-        hostelET = (EditText) findViewById(R.id.hostel_asu);
+        //hostelET = (EditText) findViewById(R.id.hostel_asu);
         fnameET = (EditText) findViewById(R.id.fname_asu);
         lnameET = (EditText) findViewById(R.id.lname_asu);
         uidET = (EditText) findViewById(R.id.uid_asu);
@@ -67,9 +74,44 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         loginTV.setOnClickListener(this);
 
         profilePicIV = (ImageView) findViewById(R.id.pic_asu);
-
         profilePicFL = (FrameLayout) findViewById(R.id.pic_frame_asu);
         profilePicFL.setOnClickListener(this);
+
+        hostels = (Spinner) findViewById(R.id.hostel_asu);
+
+        // Spinner click listener
+        hostels.setOnItemSelectedListener(this);
+
+
+        Utility.setupUI(SignUpActivity.this, findViewById(R.id.signupView));
+
+    }
+
+    void setHostelSpinner(JSONArray arr) {
+        // Spinner Drop down elements
+        List<String> hostelList = new ArrayList<String>();
+        hostelList.add("None");
+
+        for(int i=0;i<arr.length();i++) {
+            String name = "";
+            try {
+                JSONObject hostel = arr.getJSONObject(i);
+                String hostelName = hostel.getString("hostel_name");
+                hostelList.add(hostelName);
+            }
+            catch(JSONException e) {
+
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, hostelList);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        hostels.setAdapter(dataAdapter);
     }
 
     void selectUserPic() {
@@ -86,9 +128,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
             Uri uri = data.getData();
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 Log.d("SignUp", String.valueOf(bitmap));
@@ -116,7 +156,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     public void uploadData(int pic_id){
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
-        String url=LoginActivity.ip+"/user/signup.json";
+        String url="http://"+Utility.IP+"/user/signup.json";
         Map<String, String> params = new HashMap();
         params.put("first_name", fnameET.getText().toString().trim());
         params.put("last_name", lnameET.getText().toString().trim());
@@ -152,7 +192,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
 
-                        showToast("Signup : "+success+" | UserID : "+Integer.toString(user_id));
+                        Utility.showMsg(getApplicationContext(), "Signup : " + success + " | UserID : " + Integer.toString(user_id));
                         showComplaintsActivity();
                     }
                 },
@@ -162,7 +202,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Dismissing the progress dialog
                         loading.dismiss();
                         //Showing toast
-                        showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -193,7 +233,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        showToast(s);
+                        Utility.showMsg(getApplicationContext(), s);
                     }
                 },
                 new Response.ErrorListener() {
@@ -202,7 +242,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Dismissing the progress dialog
                         loading.dismiss();
                         //Showing toast
-                        showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -231,7 +271,28 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         requestQueue.add(stringRequest);
     }
 
-    boolean checkData() {           // TODO: 26/03/16  
+    boolean checkData() {           // TODO: 26/03/16
+        if(usernameET.getText().toString().equals("")) {
+            Utility.showMsg(this, "Enter User ID");
+            return false;
+        }
+        if(passwordET.getText().toString().equals("")) {
+            Utility.showMsg(this, "Enter password");
+            return false;
+        }
+        if(fnameET.getText().toString().equals("")) {
+            Utility.showMsg(this, "Enter First Name");
+            return false;
+        }
+
+        if( !passwordET.getText().toString().trim().equals(confPasswordET.getText().toString().trim())) {
+            Utility.showMsg(this, "Password and Confirm password do not match");
+            return false;
+        }
+        if(android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.getText().toString()).matches()) {
+            Utility.showMsg(this, "Enter valid email");
+            return false;
+        }
         return true;
     }
 
@@ -245,12 +306,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(it);
     }
 
-    //Shows toast with appropriate responses
-    public void showToast(String msg)
-    {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -259,7 +314,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.signup_asu:
                 if(checkData()) {
-
                     signupUser();
                 }
                 break;
@@ -267,5 +321,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 selectUserPic();
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 }
