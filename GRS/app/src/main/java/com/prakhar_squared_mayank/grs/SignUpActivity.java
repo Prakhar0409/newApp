@@ -50,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     ImageView profilePicIV;
     FrameLayout profilePicFL;
     Bitmap scaledBitmap;
+    Spinner hostels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,57 +77,41 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         profilePicFL = (FrameLayout) findViewById(R.id.pic_frame_asu);
         profilePicFL.setOnClickListener(this);
 
-        Spinner hostels = (Spinner) findViewById(R.id.hostel_asu);
+        hostels = (Spinner) findViewById(R.id.hostel_asu);
 
         // Spinner click listener
         hostels.setOnItemSelectedListener(this);
-
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("None");
-        categories.add("Girnar");
-        categories.add("Satpura");
-        categories.add("Zanskar ");
-        categories.add("Personal");
-        categories.add("Travel");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        hostels.setAdapter(dataAdapter);
-
-
-        Spinner Groups = (Spinner) findViewById(R.id.hostel_asu);
-
-        // Spinner click listener
-        hostels.setOnItemSelectedListener(this);
-
-        // Spinner Drop down elements
-//        List<String> groupCats = new ArrayList<String>();
-//        groupCats.add("None");
-//        groupCats.add("");
-//        groupCats.add("Satpura");
-//        groupCats.add("Zanskar ");
-//        groupCats.add("Personal");
-//        groupCats.add("Travel");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        hostels.setAdapter(dataAdapter);
-
 
 
         Utility.setupUI(SignUpActivity.this, findViewById(R.id.signupView));
 
+    }
+
+    void setHostelSpinner(JSONArray arr) {
+        // Spinner Drop down elements
+        List<String> hostelList = new ArrayList<String>();
+        hostelList.add("None");
+
+        for(int i=0;i<arr.length();i++) {
+            String name = "";
+            try {
+                JSONObject hostel = arr.getJSONObject(i);
+                String hostelName = hostel.getString("hostel_name");
+                hostelList.add(hostelName);
+            }
+            catch(JSONException e) {
+
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, hostelList);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        hostels.setAdapter(dataAdapter);
     }
 
     public void getData(){
@@ -317,10 +302,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //Adding request to the queue
         requestQueue.add(stringRequest);
     }
-
- //   EditText usernameET, passwordET, confPasswordET, hostelET,yearOfJoiningET;
-//    EditText fnameET, lnameET, uidET, contactET, emailET;
-
 
     boolean checkData() {           // TODO: 26/03/16
         if(usernameET.getText().toString().equals("")) {

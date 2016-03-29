@@ -114,6 +114,17 @@ public class ComplaintListAdapter extends BaseAdapter {
         }
 
 
+        boolean bookmarked = false;
+        if (jsonObject.has("bookmarked")) {
+            bookmarked = jsonObject.optBoolean("bookmarked");
+            if(bookmarked) {
+                holder.bookmarkIV.setImageResource(R.drawable.yes_bookmark);
+            }
+            else {
+                holder.bookmarkIV.setImageResource(R.drawable.not_bookmarked);
+            }
+        }
+
         holder.titleTV.setText(title);
         final int up = Integer.parseInt(upCount);
         final int down = Integer.parseInt(downCount);
@@ -196,13 +207,13 @@ public class ComplaintListAdapter extends BaseAdapter {
 
     public class SwipeDetector implements View.OnTouchListener {
 
-        private static final int MIN_DISTANCE = 300;
+        private static final int MIN_DISTANCE = 170;
         private static final int MIN_LOCK_DISTANCE = 30; // disallow motion intercept
         private boolean motionInterceptDisallowed = false;
         private float downX, upX;
         private ViewHolder holder;
         private int position;
-        private boolean open = false;
+        private boolean closed=true, hooked=false, open=false, closing=false, locked=false;
 
         public SwipeDetector(ViewHolder h, int pos) {
             holder = h;
@@ -221,42 +232,106 @@ public class ComplaintListAdapter extends BaseAdapter {
                     upX = event.getX();
                     Log.d("CLA", ""+upX);
                     float deltaX = downX - upX;
+                    if(locked) return false;
 
-                    if (Math.abs(deltaX) > MIN_LOCK_DISTANCE && listView != null && !motionInterceptDisallowed) {
-                        listView.requestDisallowInterceptTouchEvent(true);
-                        motionInterceptDisallowed = true;
-                    }
-
-                    if (deltaX > 0) {
-                        holder.hideView.setVisibility(View.GONE);
-                    } else {
-                        // if first swiped left and then swiped right
-                        holder.hideView.setVisibility(View.VISIBLE);
-                    }
-
-                    if(!open) {
-                        if (deltaX < 0 && deltaX > -170) {
-                            swipe(-(int) deltaX);
+                    if(closed) {
+                        if(deltaX > 0) {
+                            holder.hideView.setVisibility(View.GONE);
+                            swipe(0);
                         }
-                    } else {
-                        if (deltaX > 0 && deltaX < 170 && upX > 0) {
+                        else if (Math.abs(deltaX) > MIN_LOCK_DISTANCE && listView != null && !motionInterceptDisallowed) {
+                            listView.requestDisallowInterceptTouchEvent(true);
+                            motionInterceptDisallowed = true;
+                            hooked = true;
+                            closed = false;
+                        }
+                        else {
+                            holder.hideView.setVisibility(View.VISIBLE);
                             swipe(-(int) deltaX);
                         }
                     }
+                    else if(hooked && !open) {
+                        if(Math.abs(deltaX) < MIN_LOCK_DISTANCE) {
+                            hooked = false;
+                            closed = true;
+                        }
+                        if(Math.abs(deltaX) < MIN_DISTANCE) {
+                            swipe(-(int) deltaX);
+                        }
+                        else {
+                            hooked = true;
+                            open = true;
+                            if(closing) {
+                                swipe(0);
+                                locked = true;
+                            }
+                            else {
+                                swipe(MIN_DISTANCE);
+                            }
+                        }
+                    }
+                    else if(hooked && open) {
+                        if(deltaX > MIN_DISTANCE && deltaX < 0) {
+                            swipe(-(int) deltaX);
+                            hooked = true;
+                            open = false;
+                        }
+                        else if(deltaX > 0) {
+                            swipe(-(int) deltaX);
+                            hooked = true;
+                            open = false;
+                            closing = true;
+                        }
+                        else {
+                            swipe(MIN_DISTANCE);
+                        }
+                    }
+
+//                    if (Math.abs(deltaX) > MIN_LOCK_DISTANCE && listView != null && !motionInterceptDisallowed) {
+//                        listView.requestDisallowInterceptTouchEvent(true);
+//                        motionInterceptDisallowed = true;
+//                    }
+//
+//                    if (deltaX > 0) {
+//                        holder.hideView.setVisibility(View.GONE);
+//                    } else {
+//                        // if first swiped left and then swiped right
+//                        holder.hideView.setVisibility(View.VISIBLE);
+//                    }
+//
+//                    if(!open) {
+//                        if (deltaX < 0 && deltaX > -170) {
+//                            swipe(-(int) deltaX);
+//                        }
+//                    } else {
+//                        if (deltaX > 0 && deltaX < 170 && upX > 0) {
+//                            swipe(-(int) deltaX);
+//                        }
+//                    }
                     return true;
                 }
 
-                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_UP: {
                     upX = event.getX();
                     float deltaX = upX - downX;
-                    if (Math.abs(deltaX) >= 170) {
-                        // left or right
-//                        swipeRemove();
-                        open = true;
-                    } else {
-                        open = false;
-                        swipeBack();
+                    if(closed) {
+                        swipe(0);
                     }
+                    else if(hooked && !open) {
+                        swipe(0);
+                    }
+                    else if(hooked && open) {
+                        swipe(MIN_DISTANCE);
+                    }
+                    locked = true;
+//                    if (Math.abs(deltaX) >= 170) {
+//                        // left or right
+////                        swipeRemove();
+//                        open = true;
+//                    } else {
+//                        open = false;
+//                        swipeBack();
+//                    }
 
                     if (listView != null) {
                         listView.requestDisallowInterceptTouchEvent(false);
@@ -265,6 +340,7 @@ public class ComplaintListAdapter extends BaseAdapter {
 
                     holder.hideView.setVisibility(View.VISIBLE);
                     return true;
+                }
 
                 case MotionEvent.ACTION_CANCEL:
                     holder.hideView.setVisibility(View.VISIBLE);

@@ -2,14 +2,18 @@ package com.prakhar_squared_mayank.grs;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,11 +31,12 @@ import org.w3c.dom.Text;
  * Use the {@link TimelineFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TimelineFragment extends Fragment {
+public class TimelineFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private String timelineDataString;
     View mainView;
     JSONArray timelineData;
+    ImageView fab;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,6 +70,8 @@ public class TimelineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_timeline, container, false);
+        fab = (ImageView) mainView.findViewById(R.id.fab_ft);
+        fab.setOnClickListener(this);
         makeTimeline();
 
         return mainView;
@@ -76,6 +83,7 @@ public class TimelineFragment extends Fragment {
     }
 
     public void makeTimeline() {
+        clearLinearLayout();
         String title1="Error with data.", id1="";
         try {
             title1 = timelineData.getJSONObject(0).getString("status_name");
@@ -132,11 +140,8 @@ public class TimelineFragment extends Fragment {
         Log.d("TimelineFragment", "Adding timeline event: " + title);
         linearLayout.addView(view);
         Log.d("TimelineFragment", "Count now: " + linearLayout.getChildCount());
-
-//        linearLayout.add
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -146,12 +151,6 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -160,18 +159,49 @@ public class TimelineFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    void addNewStatus() {
+        Log.d("Timeline fragment", "New Status");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Update Status");
+
+        final LinearLayout ll = new LinearLayout(getActivity());
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(15, 5, 15, 5);
+        final TextView tv = new TextView(getActivity());
+        tv.setText("Status title:");
+        final EditText input2 = new EditText(getActivity());
+        input2.setInputType(InputType.TYPE_CLASS_TEXT);
+        input2.setHint("Enter status here");
+
+        ll.addView(input2);
+        builder.setView(ll);
+
+        builder.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.fab_ft:
+                addNewStatus();
+                break;
+        }
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

@@ -16,7 +16,8 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:label="Login to GRS">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,14 +29,22 @@
             android:label="Sign Up" />
         <activity
             android:name=".ComplaintsActivity"
+            android:label="Complaints"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".ValidationRequestActivity" />
-        <activity android:name=".ComplaintDetailActivity" />
-        <activity android:name=".StatusDetailActivity" />
-        <activity android:name=".SubmitComplaintActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".BookmarksActivity" />
-        <activity android:name=".NotificationsActivity"></activity>
+        <activity android:name=".ValidationRequestActivity"
+            android:label="Validation Requests" />
+        <activity android:name=".ComplaintDetailActivity"
+            android:label="Complaint" />
+        <activity android:name=".StatusDetailActivity"
+            android:label="Complaint Status" />
+        <activity android:name=".SubmitComplaintActivity"
+            android:label="Submit New Complaint" />
+        <activity android:name=".ProfileActivity"
+            android:label="My Profile" />
+        <activity android:name=".BookmarksActivity"
+            android:label="Bookmarks" />
+        <activity android:name=".NotificationsActivity"
+            android:label="My Notifications"></activity>
     </application>
 
 </manifest>

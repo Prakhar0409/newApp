@@ -48,7 +48,7 @@
             android:id="@+id/bookmark_cr"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="#895764"
+            android:src="@drawable/not_bookmarked"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"/>
