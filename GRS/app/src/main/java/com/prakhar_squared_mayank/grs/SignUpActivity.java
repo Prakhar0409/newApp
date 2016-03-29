@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -128,6 +129,39 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    public void getData(){
+        String url="http://"+Utility.IP+Utility.HOSTELS;
+        final ProgressDialog loading = ProgressDialog.show(this,"Fetching data...","Please wait...",false,false);
+        Log.d("Url hit was:",url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        try {
+                            JSONArray data=response.getJSONArray("data");
+                            setHostelSpinner(data);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
+    }
+
     void selectUserPic() {
         Intent intent = new Intent();
         // Show only images, no videos or anything else
@@ -148,7 +182,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d("SignUp", String.valueOf(bitmap));
                 int nh = (int) ( bitmap.getHeight() * (256.0 / bitmap.getWidth()) );
                 scaledBitmap = Bitmap.createScaledBitmap(bitmap, 256, nh, true);
-
                 profilePicIV.setImageBitmap(scaledBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -229,7 +262,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void uploadImage(){
         //Showing the progress dialog
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading Image...","Please wait...",false,false);
-        String url=LoginActivity.ip+"/api/pictures.json";
+        String url="http://"+Utility.IP+Utility.UPLOADIMAGE;
         Log.d("Url hit was:",url);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
