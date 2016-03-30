@@ -47,7 +47,7 @@ import java.util.Map;
 public class ComplaintsActivity extends AppCompatActivity {
 
     String imageString;
-    String user_id="2";
+    int user_id,pic_id=0;
     Bitmap bitmap = null;
     Menu menu;
     private Toolbar toolbar;
@@ -75,9 +75,47 @@ public class ComplaintsActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        getImageString(6);
+        user_id=getIntent().getIntExtra("user_id",0);
+        if(user_id==0){
+            Intent it=new Intent(this,LoginActivity.class);
+            startActivity(it);
+        }
+        getUser();
+        //getImageString(6);
 
 
+    }
+
+    public void getUser(){
+        String url="http://"+Utility.IP+Utility.USERPROFILE;
+        Log.d("Url hit was:", url);
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject user= response.getJSONObject("user");
+
+                    if(user.isNull("picture_id")){
+                        Utility.showMsg(getApplicationContext(),"Bad Luck. No Image Found!");
+                    }else{
+                        pic_id=user.getInt("picture_id");
+                        getImageString(pic_id);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("Volley failed");
+            }
+        });
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 
     public void getImageString(int id){

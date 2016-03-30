@@ -460,11 +460,13 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        int pic_id=2;
+                        int pic_id=0;
                         try {
                             JSONObject res= new JSONObject(s);
-                            JSONObject data=res.getJSONObject("data");
-                            pic_id=data.getInt("id");
+                            if(!res.isNull("image")){
+                                pic_id=res.getInt("image");
+                            }
+
                             System.out.println("pic_id : " + pic_id);
 
                         } catch (JSONException e) {

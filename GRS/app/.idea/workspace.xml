@@ -69,8 +69,65 @@
       <file leaf-file-name="ComplaintsActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.529412">
-              <caret line="196" column="5" selection-start-line="157" selection-start-column="4" selection-end-line="196" selection-end-column="5" />
+            <state vertical-scroll-proportion="-9.441176">
+              <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
+              <folding>
+                <element signature="e#2946#3629#0" expanded="true" />
+                <element signature="e#3628#3629#0" expanded="true" />
+                <element signature="e#3631#3862#0" expanded="true" />
+                <element signature="e#3861#3862#0" expanded="true" />
+                <element signature="e#4231#5237#0" expanded="true" />
+                <element signature="e#5236#5237#0" expanded="true" />
+                <element signature="e#5255#5683#0" expanded="true" />
+                <element signature="e#5682#5683#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ComplaintDetailActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDetailActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33333334">
+              <caret line="149" column="50" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
+              <folding>
+                <element signature="e#12272#12288#0" expanded="true" />
+                <element signature="e#17607#18613#0" expanded="true" />
+                <element signature="e#18612#18613#0" expanded="true" />
+                <element signature="e#18631#19060#0" expanded="true" />
+                <element signature="e#19059#19060#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubmitComplaintActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SubmitComplaintActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-106.117645">
+              <caret line="462" column="36" selection-start-line="462" selection-start-column="36" selection-end-line="462" selection-end-column="36" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2188#2196#0" expanded="true" />
+                <element signature="e#2225#2233#0" expanded="true" />
+                <element signature="e#2264#2272#0" expanded="true" />
+                <element signature="e#2406#2414#0" expanded="true" />
+                <element signature="e#14291#14299#0" expanded="true" />
+                <element signature="e#15590#15598#0" expanded="true" />
+                <element signature="e#21534#21542#0" expanded="true" />
+                <element signature="e#21765#21773#0" expanded="true" />
+                <element signature="e#22085#22093#0" expanded="true" />
+                <element signature="e#22292#22300#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LoginActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/LoginActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.9117646">
+              <caret line="94" column="38" selection-start-line="94" selection-start-column="38" selection-end-line="94" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -86,130 +143,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SubmitComplaintActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SubmitComplaintActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.27816093">
-              <caret line="308" column="9" selection-start-line="308" selection-start-column="9" selection-end-line="308" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2188#2196#0" expanded="true" />
-                <element signature="e#2225#2233#0" expanded="true" />
-                <element signature="e#2264#2272#0" expanded="true" />
-                <element signature="e#2406#2414#0" expanded="true" />
-                <element signature="e#5232#6360#0" expanded="true" />
-                <element signature="e#6359#6360#0" expanded="true" />
-                <element signature="e#6406#7500#0" expanded="true" />
-                <element signature="e#7499#7500#0" expanded="true" />
-                <element signature="e#7545#8630#0" expanded="true" />
-                <element signature="e#8629#8630#0" expanded="true" />
-                <element signature="e#12966#13338#0" expanded="true" />
-                <element signature="e#13337#13338#0" expanded="true" />
-                <element signature="e#13356#13783#0" expanded="true" />
-                <element signature="e#13782#13783#0" expanded="true" />
-                <element signature="e#14287#14295#0" expanded="true" />
-                <element signature="e#14781#16634#0" expanded="true" />
-                <element signature="e#15586#15594#0" expanded="true" />
-                <element signature="e#16633#16634#0" expanded="true" />
-                <element signature="e#16652#16994#0" expanded="true" />
-                <element signature="e#16993#16994#0" expanded="true" />
-                <element signature="e#20887#20903#0" expanded="true" />
-                <element signature="e#21510#21518#0" expanded="true" />
-                <element signature="e#21741#21749#0" expanded="true" />
-                <element signature="e#22061#22069#0" expanded="true" />
-                <element signature="e#22268#22276#0" expanded="true" />
-                <element signature="e#22881#24099#0" expanded="true" />
-                <element signature="e#24098#24099#0" expanded="true" />
-                <element signature="e#24117#24447#0" expanded="true" />
-                <element signature="e#24446#24447#0" expanded="true" />
-                <element signature="e#24893#26109#0" expanded="true" />
-                <element signature="e#26108#26109#0" expanded="true" />
-                <element signature="e#26127#26554#0" expanded="true" />
-                <element signature="e#26553#26554#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="user_row.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/res/layout/user_row.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.470588">
-              <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utility.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/Utility.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1555#1563#0" expanded="true" />
-                <element signature="e#1618#1626#0" expanded="true" />
-                <element signature="e#1683#1691#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_submit_complaint.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_submit_complaint.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.5">
-              <caret line="235" column="73" selection-start-line="235" selection-start-column="73" selection-end-line="235" selection-end-column="73" />
-              <folding>
-                <element signature="e#420#453#0" expanded="true" />
-                <element signature="e#482#517#0" expanded="true" />
-                <element signature="e#547#582#0" expanded="true" />
-                <element signature="e#610#643#0" expanded="true" />
-                <element signature="e#1267#1290#0" expanded="true" />
-                <element signature="e#2580#2603#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ComplaintLevel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintLevel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-              <folding>
-                <element signature="e#284#285#0" expanded="false" />
-                <element signature="e#328#329#0" expanded="false" />
-                <element signature="e#354#355#0" expanded="false" />
-                <element signature="e#379#380#0" expanded="false" />
-                <element signature="e#412#413#0" expanded="false" />
-                <element signature="e#440#441#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="SignUpActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SignUpActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="99" column="41" selection-start-line="99" selection-start-column="41" selection-end-line="99" selection-end-column="41" />
+            <state vertical-scroll-proportion="-7.0588236">
+              <caret line="273" column="43" selection-start-line="273" selection-start-column="43" selection-end-line="273" selection-end-column="43" />
               <folding>
-                <element signature="e#4505#5192#0" expanded="false" />
-                <element signature="e#5191#5192#0" expanded="false" />
-                <element signature="e#5210#5637#0" expanded="false" />
-                <element signature="e#5636#5637#0" expanded="false" />
-                <element signature="e#8784#9756#0" expanded="false" />
-                <element signature="e#9755#9756#0" expanded="false" />
-                <element signature="e#9774#10201#0" expanded="false" />
-                <element signature="e#10200#10201#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#3851#3859#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1920,23 +1861,23 @@
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/MyComplaintsFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/OthersComplaintsFragment.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_complaint_detail.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDetailActivity.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_login.xml" />
         <option value="$PROJECT_DIR$/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/volleySingleton.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/LoginActivity.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_sign_up.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintsActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SignUpActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintLevel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDomain.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/Utility.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/user_row.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/UserRowAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_submit_complaint.xml" />
         <option value="$PROJECT_DIR$/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/Utility.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintsActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SignUpActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SubmitComplaintActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDetailActivity.java" />
       </list>
     </option>
   </component>
@@ -2402,7 +2343,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="124" column="1117" selection-start-line="124" selection-start-column="1117" selection-end-line="124" selection-end-column="1117" />
-          <folding />
+          <folding>
+            <element signature="e#2946#3629#0" expanded="true" />
+            <element signature="e#3628#3629#0" expanded="true" />
+            <element signature="e#3631#3862#0" expanded="true" />
+            <element signature="e#3861#3862#0" expanded="true" />
+            <element signature="e#4231#5237#0" expanded="true" />
+            <element signature="e#5236#5237#0" expanded="true" />
+            <element signature="e#5255#5683#0" expanded="true" />
+            <element signature="e#5682#5683#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2463,14 +2413,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="196" column="23" selection-start-line="196" selection-start-column="23" selection-end-line="196" selection-end-column="23" />
           <folding>
-            <element signature="e#4505#5192#0" expanded="false" />
-            <element signature="e#5191#5192#0" expanded="false" />
-            <element signature="e#5210#5637#0" expanded="false" />
-            <element signature="e#5636#5637#0" expanded="false" />
-            <element signature="e#8784#9756#0" expanded="false" />
-            <element signature="e#9755#9756#0" expanded="false" />
-            <element signature="e#9774#10201#0" expanded="false" />
-            <element signature="e#10200#10201#0" expanded="false" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3851#3859#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2479,7 +2423,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="125" column="0" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#2946#3629#0" expanded="true" />
+            <element signature="e#3628#3629#0" expanded="true" />
+            <element signature="e#3631#3862#0" expanded="true" />
+            <element signature="e#3861#3862#0" expanded="true" />
+            <element signature="e#4231#5237#0" expanded="true" />
+            <element signature="e#5236#5237#0" expanded="true" />
+            <element signature="e#5255#5683#0" expanded="true" />
+            <element signature="e#5682#5683#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2621,21 +2574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/MyComplaintsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="106" column="20" selection-start-line="67" selection-start-column="5" selection-end-line="106" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="113" column="53" selection-start-line="113" selection-start-column="53" selection-end-line="113" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_bookmarks.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2706,53 +2644,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="146" column="10" selection-start-line="146" selection-start-column="10" selection-end-line="146" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/menu/submit_complaint_menu.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SignUpActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="99" column="41" selection-start-line="99" selection-start-column="41" selection-end-line="99" selection-end-column="41" />
-          <folding>
-            <element signature="e#4505#5192#0" expanded="false" />
-            <element signature="e#5191#5192#0" expanded="false" />
-            <element signature="e#5210#5637#0" expanded="false" />
-            <element signature="e#5636#5637#0" expanded="false" />
-            <element signature="e#8784#9756#0" expanded="false" />
-            <element signature="e#9755#9756#0" expanded="false" />
-            <element signature="e#9774#10201#0" expanded="false" />
-            <element signature="e#10200#10201#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintLevel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-          <folding>
-            <element signature="e#284#285#0" expanded="false" />
-            <element signature="e#328#329#0" expanded="false" />
-            <element signature="e#354#355#0" expanded="false" />
-            <element signature="e#379#380#0" expanded="false" />
-            <element signature="e#412#413#0" expanded="false" />
-            <element signature="e#440#441#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2774,19 +2670,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/Utility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1555#1563#0" expanded="true" />
-            <element signature="e#1618#1626#0" expanded="true" />
-            <element signature="e#1683#1691#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/user_row.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2795,24 +2678,6 @@
         <state vertical-scroll-proportion="-4.470588">
           <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_submit_complaint.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.5">
-          <caret line="235" column="73" selection-start-line="235" selection-start-column="73" selection-end-line="235" selection-end-column="73" />
-          <folding>
-            <element signature="e#420#453#0" expanded="true" />
-            <element signature="e#482#517#0" expanded="true" />
-            <element signature="e#547#582#0" expanded="true" />
-            <element signature="e#610#643#0" expanded="true" />
-            <element signature="e#1267#1290#0" expanded="true" />
-            <element signature="e#2580#2603#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2848,53 +2713,121 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintsActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintLevel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.529412">
-          <caret line="196" column="5" selection-start-line="157" selection-start-column="4" selection-end-line="196" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.35181236">
+          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+          <folding>
+            <element signature="e#232#233#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_submit_complaint.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.508046">
+          <caret line="235" column="73" selection-start-line="235" selection-start-column="73" selection-end-line="235" selection-end-column="73" />
+          <folding>
+            <element signature="e#420#453#0" expanded="true" />
+            <element signature="e#482#517#0" expanded="true" />
+            <element signature="e#547#582#0" expanded="true" />
+            <element signature="e#610#643#0" expanded="true" />
+            <element signature="e#1267#1290#0" expanded="true" />
+            <element signature="e#2580#2603#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/Utility.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="51" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1692#1700#0" expanded="true" />
+            <element signature="e#1755#1763#0" expanded="true" />
+            <element signature="e#1820#1828#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/MyComplaintsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="106" column="20" selection-start-line="67" selection-start-column="0" selection-end-line="106" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.9117646">
+          <caret line="94" column="38" selection-start-line="94" selection-start-column="38" selection-end-line="94" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SignUpActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.0588236">
+          <caret line="273" column="43" selection-start-line="273" selection-start-column="43" selection-end-line="273" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3851#3859#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/SubmitComplaintActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.27816093">
-          <caret line="308" column="9" selection-start-line="308" selection-start-column="9" selection-end-line="308" selection-end-column="9" />
+        <state vertical-scroll-proportion="-106.117645">
+          <caret line="462" column="36" selection-start-line="462" selection-start-column="36" selection-end-line="462" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2188#2196#0" expanded="true" />
             <element signature="e#2225#2233#0" expanded="true" />
             <element signature="e#2264#2272#0" expanded="true" />
             <element signature="e#2406#2414#0" expanded="true" />
-            <element signature="e#5232#6360#0" expanded="true" />
-            <element signature="e#6359#6360#0" expanded="true" />
-            <element signature="e#6406#7500#0" expanded="true" />
-            <element signature="e#7499#7500#0" expanded="true" />
-            <element signature="e#7545#8630#0" expanded="true" />
-            <element signature="e#8629#8630#0" expanded="true" />
-            <element signature="e#12966#13338#0" expanded="true" />
-            <element signature="e#13337#13338#0" expanded="true" />
-            <element signature="e#13356#13783#0" expanded="true" />
-            <element signature="e#13782#13783#0" expanded="true" />
-            <element signature="e#14287#14295#0" expanded="true" />
-            <element signature="e#14781#16634#0" expanded="true" />
-            <element signature="e#15586#15594#0" expanded="true" />
-            <element signature="e#16633#16634#0" expanded="true" />
-            <element signature="e#16652#16994#0" expanded="true" />
-            <element signature="e#16993#16994#0" expanded="true" />
-            <element signature="e#20887#20903#0" expanded="true" />
-            <element signature="e#21510#21518#0" expanded="true" />
-            <element signature="e#21741#21749#0" expanded="true" />
-            <element signature="e#22061#22069#0" expanded="true" />
-            <element signature="e#22268#22276#0" expanded="true" />
-            <element signature="e#22881#24099#0" expanded="true" />
-            <element signature="e#24098#24099#0" expanded="true" />
-            <element signature="e#24117#24447#0" expanded="true" />
-            <element signature="e#24446#24447#0" expanded="true" />
-            <element signature="e#24893#26109#0" expanded="true" />
-            <element signature="e#26108#26109#0" expanded="true" />
-            <element signature="e#26127#26554#0" expanded="true" />
-            <element signature="e#26553#26554#0" expanded="true" />
+            <element signature="e#14291#14299#0" expanded="true" />
+            <element signature="e#15590#15598#0" expanded="true" />
+            <element signature="e#21534#21542#0" expanded="true" />
+            <element signature="e#21765#21773#0" expanded="true" />
+            <element signature="e#22085#22093#0" expanded="true" />
+            <element signature="e#22292#22300#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.441176">
+          <caret line="162" column="5" selection-start-line="162" selection-start-column="5" selection-end-line="162" selection-end-column="5" />
+          <folding>
+            <element signature="e#2946#3629#0" expanded="true" />
+            <element signature="e#3628#3629#0" expanded="true" />
+            <element signature="e#3631#3862#0" expanded="true" />
+            <element signature="e#3861#3862#0" expanded="true" />
+            <element signature="e#4231#5237#0" expanded="true" />
+            <element signature="e#5236#5237#0" expanded="true" />
+            <element signature="e#5255#5683#0" expanded="true" />
+            <element signature="e#5682#5683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/prakhar_squared_mayank/grs/ComplaintDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="149" column="50" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
+          <folding>
+            <element signature="e#12272#12288#0" expanded="true" />
+            <element signature="e#17607#18613#0" expanded="true" />
+            <element signature="e#18612#18613#0" expanded="true" />
+            <element signature="e#18631#19060#0" expanded="true" />
+            <element signature="e#19059#19060#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -144,7 +144,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
             }
             complaintID = Complaint.optInt("id", 0);
 
-            c_pic = (ImageView) findViewById(R.id.complaint_pic_acd);
+
 
 
             int c_picId=Complaint.getInt("photo_id");
@@ -155,7 +155,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        c_pic = (ImageView) findViewById(R.id.complaint_pic_acd);
         bookmarkIV = (ImageView) findViewById(R.id.bookmark_acd);
         setBookmark(bookmarkedA);
         bookmarkIV.setOnClickListener(this);
@@ -478,8 +478,8 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     }
 
 
-    public void getImageString(int id){
-        String url=LoginActivity.ip+"/api/pictures/id/"+Integer.toString(id)+".json";
+    public void getImageString(int pic_id){
+        String url="http://"+Utility.IP+Utility.DOWNLOADIMAGE+"?image_id="+Integer.toString(pic_id);
         Log.d("Url hit was:", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -490,13 +490,14 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
                         //Showing toast message of the response
                         try {
                             JSONObject res= new JSONObject(s);
-                            JSONArray data=res.getJSONArray("data");
-                            JSONObject imageObject=data.getJSONObject(0);
+
+                            JSONObject imageObject=res.getJSONObject("image");
                             if (imageObject!=null){
-                                imageString = imageObject.getString("picture");
+                                imageString = imageObject.getString("picture_name");
                                 System.out.println("imageString : "+imageString);
+                                changeImage(imageString);
                             }
-                            changeImage(imageString);
+
 
                             showToast("Success ful image chuityapa");
                         } catch (JSONException e) {
@@ -511,7 +512,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
                         //Dismissing the progress dialog
                         //loading.dismiss();
                         //Showing toast
-                        showToast(volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
                     }
                 });
         //Creating a Request Queue
