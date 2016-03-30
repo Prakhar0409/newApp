@@ -65,6 +65,7 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
     }
 
     void getData() {
+
         String url2="http://"+Utility.IP+Utility.COMPLAINTSMADETO;
         System.out.println("Url being hit is : " + url2);
 

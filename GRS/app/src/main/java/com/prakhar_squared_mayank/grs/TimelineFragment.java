@@ -167,6 +167,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
                     getActivity().startActivity(it);
                 }
             });
+            image.setVisibility(View.VISIBLE);
         }
 
 

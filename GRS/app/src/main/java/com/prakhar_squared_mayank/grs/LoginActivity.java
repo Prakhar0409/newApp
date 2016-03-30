@@ -41,7 +41,6 @@ import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    //public static String ip="192.168.43.147:8000";//"10.0.2.2:8000";
 
     SessionManager session;
     EditText useridET, passwordET;

@@ -139,15 +139,16 @@ public class WallFragment extends Fragment implements View.OnClickListener {
 
         for(int index = 0;index < wallData.length();index++) {
             Log.d("WallFragment", "Adding timeline event");
-            String comment="Error with data.", id="";
+            String comment="Error with data.", id="", name = "";
             try {
                 comment = wallData.getJSONObject(index).getString("comment_made");
-                id = wallData.getJSONObject(index).getString("comment_id");
+                name = wallData.getJSONObject(index).getString("user_name_first")+" "+wallData.getJSONObject(index).getString("user_name_last");
+//                id = wallData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
 
             }
-            addChildLayout(comment, id);
+            addChildLayout(comment, id, name);
         }
     }
 
@@ -156,7 +157,7 @@ public class WallFragment extends Fragment implements View.OnClickListener {
         linearLayout.removeAllViewsInLayout();
     }
 
-    public void addChildLayout(String comment, String id){
+    public void addChildLayout(String comment, String id, String username){
 
         LayoutInflater layoutInflater=(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -166,6 +167,9 @@ public class WallFragment extends Fragment implements View.OnClickListener {
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         TextView titleTV = (TextView) view.findViewById(R.id.text_ci);
         titleTV.setText(comment);
+
+        TextView usernameTV = (TextView) view.findViewById(R.id.username_ci);
+        usernameTV.setText(username);
 
         Log.d("TimelineFragment", "Adding timeline event: " + comment);
         linearLayout.addView(view);

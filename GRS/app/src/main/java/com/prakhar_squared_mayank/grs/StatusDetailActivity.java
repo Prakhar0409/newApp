@@ -106,15 +106,17 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
 
         for(int index = 0;index < commentData.length();index++) {
             Log.d("StatusDetailActivity", "Adding comment.");
-            String comment="Error with data.", id="";
+            String comment="Error with data.", id="", username="";
             try {
                 comment = commentData.getJSONObject(index).getString("comment");
-                id = commentData.getJSONObject(index).getString("comment_id");
+                username = commentData.getJSONObject(index).getString("user_name_first")+" "+commentData.getJSONObject(index).getString("user_name_last");
+//                id = commentData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
 
             }
-            addChildLayout(comment, id);
+            Log.d("SDA", "setting username "+username);
+            addChildLayout(comment, id, username);
         }
     }
 
@@ -123,7 +125,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
         linearLayout.removeAllViewsInLayout();
     }
 
-    public void addChildLayout(final String comment, final String id){
+    public void addChildLayout(final String comment, final String id, final String usernameC){
 
         LayoutInflater layoutInflater=(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -133,6 +135,10 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         TextView titleTV = (TextView) view.findViewById(R.id.text_ci);
         titleTV.setText(comment);
+
+        TextView usernameTVC = (TextView) view.findViewById(R.id.username_ci);
+        Log.d("SDA", "setting usernameC "+usernameC);
+        usernameTVC.setText(usernameC);
 
         Log.d("StatusDetailActivity", "Adding comment event: " + comment);
         linearLayout.addView(view);
