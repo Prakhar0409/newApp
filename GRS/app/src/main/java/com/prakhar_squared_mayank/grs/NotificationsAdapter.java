@@ -56,7 +56,7 @@ public class NotificationsAdapter extends BaseAdapter {
         if (convertView == null) {
 
             // Inflate the custom row layout from your XML.
-            convertView = mInflater.inflate(R.layout.complaint_row, parent, false);
+            convertView = mInflater.inflate(R.layout.notification_row, parent, false);
 
             // create a new "Holder" with subviews
             holder = new ViewHolder();
@@ -75,8 +75,8 @@ public class NotificationsAdapter extends BaseAdapter {
 
         String title = "Notification Title.";
 
-        if (jsonObject.has("complaint_title")) {
-            title = (jsonObject.optString("complaint_title")).toUpperCase();
+        if (jsonObject.has("notification")) {
+            title = (jsonObject.optString("notification"));
         }
 
 

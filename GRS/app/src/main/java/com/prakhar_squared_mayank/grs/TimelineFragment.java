@@ -149,7 +149,12 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
         titleTV.setText(title1);
         final String title2=title1, id2=id1, desc2=desc1;
-        if(!title1.equals("No data.")) {
+        if(title1.equals("No data.")) {
+            ImageView image = (ImageView) mainView.findViewById(R.id.image_ft);
+            image.setVisibility(View.GONE);
+        }
+        else
+        {
             ImageView image = (ImageView) mainView.findViewById(R.id.image_ft);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override

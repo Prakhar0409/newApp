@@ -85,7 +85,7 @@ public class BookmarksAdapter extends BaseAdapter {
             // and just get the holder you already made
             holder = (ViewHolder) convertView.getTag();
         }
-        JSONObject jsonObject = (JSONObject) getItem(position);
+        final JSONObject jsonObject = (JSONObject) getItem(position);
 
         String title = "";
         String desc = "";
@@ -118,6 +118,25 @@ public class BookmarksAdapter extends BaseAdapter {
             complaintID = jsonObject.optString("complaint_id");
         }
 
+        int voteStatus = jsonObject.optInt("vote_made", -2);
+        if(voteStatus == -2) {
+            voteStatus = jsonObject.optJSONObject("vote_made").optInt("vote_type");
+        }
+        Log.d("CLA", "for "+complaintID+" vote status "+voteStatus);
+
+        if(voteStatus == 0) {
+            holder.upIV.setImageResource(R.drawable.up_grey);
+            holder.downIV.setImageResource(R.drawable.down_grey);
+        }
+        else if(voteStatus == -1) {
+            holder.upIV.setImageResource(R.drawable.up_grey);
+            holder.downIV.setImageResource(R.drawable.down_red);
+        }
+        else if(voteStatus == 1) {
+            holder.upIV.setImageResource(R.drawable.up_red);
+            holder.downIV.setImageResource(R.drawable.down_grey);
+        }
+
         if (jsonObject.has("bookmarked")) {
             bookmarked = jsonObject.optBoolean("bookmarked");
             if(bookmarked) {
@@ -129,6 +148,12 @@ public class BookmarksAdapter extends BaseAdapter {
         }
 
         holder.titleTV.setText(title);
+        if(upCount.equals("null")) {
+            upCount = "0";
+        }
+        if(downCount.equals("null")) {
+            downCount = "0";
+        }
         final int up = Integer.parseInt(upCount);
         final int down = Integer.parseInt(downCount);
 
@@ -139,24 +164,30 @@ public class BookmarksAdapter extends BaseAdapter {
         holder.titleTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
             }
         });
 
         holder.descTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
             }
         });
 
         holder.complaintPicIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, ComplaintDetailActivity.class);
-                mContext.startActivity(it);
+                Intent intent = new Intent(mContext, ComplaintDetailActivity.class);
+                intent.putExtra("Complaint", jsonObject.toString());
+                Log.d("Complaint Detailed", jsonObject.toString());
+                mContext.startActivity(intent);
             }
         });
 
