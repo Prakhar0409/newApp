@@ -92,7 +92,7 @@ public class WallFragment extends Fragment implements View.OnClickListener {
     }
 
     public void getCommentData( ){
-        String url1="http://"+LoginActivity.ip+"/comments/complaint?complaint_id="+complaintID;
+        String url1="http://"+Utility.IP+"/comments/complaint?complaint_id="+complaintID;
 
         System.out.println("Url being hit for comment data is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
@@ -142,8 +142,8 @@ public class WallFragment extends Fragment implements View.OnClickListener {
             String comment="Error with data.", id="", name = "";
             try {
                 comment = wallData.getJSONObject(index).getString("comment_made");
-                id = wallData.getJSONObject(index).getString("comment_id");
-                name = wallData.getJSONObject(index).getString("user_name_first");
+                name = wallData.getJSONObject(index).getString("user_name_first")+" "+wallData.getJSONObject(index).getString("user_name_last");
+//                id = wallData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
 

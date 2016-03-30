@@ -42,7 +42,7 @@ public class BookmarksActivity extends AppCompatActivity {
     }
 
     void getData() {
-        String url1="http://"+LoginActivity.ip+Utility.BOOKMARKCOMPLAINTS;
+        String url1="http://"+Utility.IP+Utility.BOOKMARKCOMPLAINTS;
 
         System.out.println("Url being hit is for bookmark : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

@@ -26,7 +26,7 @@ import java.util.List;
  * Created by mayank on 26/03/16.
  */
 public class Utility {
-    public static String IP="192.168.43.147:8000";
+    public static String IP="192.168.43.48:8000";
     public static String LOGIN_URL = "/user/login.json",
                          HOSTELS = "/hostel_list.json",
                          UPLOADIMAGE="/image/upload",

@@ -429,7 +429,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     }
 
     public void getTimeLineData( ){
-        String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
+        String url1="http://"+Utility.IP+"/status/complaint?complaint_id="+complaintID;
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
@@ -465,7 +465,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     }
 
     public void getCommentData( ){
-        String url1="http://"+LoginActivity.ip+"/comments/complaint?complaint_id="+complaintID;
+        String url1="http://"+Utility.IP+"/comments/complaint?complaint_id="+complaintID;
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
@@ -511,7 +511,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
 
     public void getImageString(int id){
-        String url=LoginActivity.ip+"/api/pictures/id/"+Integer.toString(id)+".json";
+        String url=Utility.IP+"/api/pictures/id/"+Integer.toString(id)+".json";
         Log.d("Url hit was:", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

@@ -35,7 +35,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     void getData() {
-        String url1="http://"+LoginActivity.ip+"/notifications/all";
+        String url1="http://"+Utility.IP+"/notifications/all";
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

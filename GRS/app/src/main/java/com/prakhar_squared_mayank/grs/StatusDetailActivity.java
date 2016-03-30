@@ -66,7 +66,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void getData( ){
-        String url1="http://"+LoginActivity.ip+Utility.GETSTATUSCOMMENT+"?status_id="+statusID;
+        String url1="http://"+Utility.IP+Utility.GETSTATUSCOMMENT+"?status_id="+statusID;
 
         System.out.println("Url being hit comment data is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
@@ -109,12 +109,13 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
             String comment="Error with data.", id="", username="";
             try {
                 comment = commentData.getJSONObject(index).getString("comment");
-                id = commentData.getJSONObject(index).getString("comment_id");
-                username = commentData.getJSONObject(index).getString("user_name_first");
+                username = commentData.getJSONObject(index).getString("user_name_first")+" "+commentData.getJSONObject(index).getString("user_name_last");
+//                id = commentData.getJSONObject(index).getString("comment_id");
             }
             catch (JSONException e) {
 
             }
+            Log.d("SDA", "setting username "+username);
             addChildLayout(comment, id, username);
         }
     }
@@ -124,7 +125,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
         linearLayout.removeAllViewsInLayout();
     }
 
-    public void addChildLayout(final String comment, final String id, final String username){
+    public void addChildLayout(final String comment, final String id, final String usernameC){
 
         LayoutInflater layoutInflater=(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -135,8 +136,9 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
         TextView titleTV = (TextView) view.findViewById(R.id.text_ci);
         titleTV.setText(comment);
 
-        TextView usernameTV = (TextView) view.findViewById(R.id.username_ci);
-        usernameTV.setText(username);
+        TextView usernameTVC = (TextView) view.findViewById(R.id.username_ci);
+        Log.d("SDA", "setting usernameC "+usernameC);
+        usernameTVC.setText(usernameC);
 
         Log.d("StatusDetailActivity", "Adding comment event: " + comment);
         linearLayout.addView(view);
