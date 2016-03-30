@@ -108,8 +108,7 @@ public class MyComplaintsFragment extends Fragment {
             }
         }
         );
-        RequestQueue v = Volley.newRequestQueue(getActivity());
-        v.add(req1);
+        volleySingleton.getInstance(getActivity()).getRequestQueue().add(req1);
 
     }
 

@@ -56,11 +56,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     FrameLayout profilePicFL;
     Bitmap scaledBitmap;
     Spinner hostels;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+
+
+        session = new SessionManager(getApplicationContext());
 
         usernameET = (EditText) findViewById(R.id.username_asu);
         passwordET = (EditText) findViewById(R.id.pass_asu);
@@ -236,7 +241,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     user_id=user.getInt("id");
                                     Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
                                     System.out.println("Signed up with UserID : " + Integer.toString(user_id));
-                                    showComplaintsActivity(user_id, pic_id,user);
+                                    session.logoutUser();
+
+                                    //showComplaintsActivity(user_id, pic_id,user);
                                 }else{
                                     Utility.showMsg(getApplicationContext(), ": Unable to register : ");
                                 }
@@ -367,7 +374,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void showComplaintsActivity(int user_id,int pic_id,JSONObject user) {
-
 
 
         Intent it = new Intent(this, ComplaintsActivity.class);

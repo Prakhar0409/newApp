@@ -105,9 +105,7 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
             }
         }
         );
-        RequestQueue v = Volley.newRequestQueue(getActivity());
-        //v.add(req1);
-        v.add(req2);
+        volleySingleton.getInstance(getActivity()).getRequestQueue().add(req2);
 
     }
 
