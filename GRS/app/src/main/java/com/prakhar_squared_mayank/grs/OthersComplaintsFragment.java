@@ -60,12 +60,13 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
         complaintsAdapter.setListView(complaintsLV);
 
 
-        getData();
+      //  getData();
         return v;
     }
 
     void getData() {
-        String url2="http://"+Utility.IP+"/complaint/complaints/solve";
+
+        String url2="http://"+Utility.IP+Utility.COMPLAINTSMADETO;
         System.out.println("Url being hit is : " + url2);
 
         JsonObjectRequest req2 = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {

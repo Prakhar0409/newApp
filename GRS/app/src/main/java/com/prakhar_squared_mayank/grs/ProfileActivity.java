@@ -3,11 +3,16 @@ package com.prakhar_squared_mayank.grs;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -26,9 +32,16 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+
+    String imageString;
+
+
     TextView usernameTV, fnameTV, lnameTV, entryTV, contactTV, emailTV, hostelTV, nameTV;
+
     ImageView profilePicIV;
+    Menu menu;
     Bitmap scaledBitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +58,75 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         hostelTV = (TextView) findViewById(R.id.hostel_ap);
 
         profilePicIV = (ImageView) findViewById(R.id.profile_pic_ap);
-        profilePicIV.setOnClickListener(this);
-
+//      todo SEE BELOW
+//         profilePicIV.setOnClickListener(this);
+        getImageString();
         setData();
     }
+
+
+    public void getImageString(){
+        String url="http://"+ Utility.IP+Utility.DOWNLOADIMAGE+"?image_id=" ;
+        try {
+            url = "http://"+ Utility.IP+Utility.DOWNLOADIMAGE+"?image_id="+Integer.toString(Utility.USER.getInt("picture_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("Url hit was:", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        // loading.dismiss();
+                        //Showing toast message of the response
+                        try {
+                            JSONObject res= new JSONObject(s);
+
+                            JSONObject imageObject=res.getJSONObject("image");
+                            if (imageObject!=null){
+                                imageString = imageObject.getString("picture_name");
+                                System.out.println("imageString : "+imageString);
+                                changeImage(imageString);
+                            }
+
+
+                            Utility.showMsg(getApplicationContext(),"Success ful image chuityapa");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        //loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(),"volley error");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(stringRequest);
+
+    }
+
+
+    public Bitmap getImage(String pic) {
+        //if (imageString!=null){return }
+        if (scaledBitmap!=null){
+            return scaledBitmap;
+        }
+        byte[] imageAsBytes = Base64.decode(pic.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
+
+
+    public void changeImage(String imageString){
+        Bitmap image=getImage(imageString);
+        profilePicIV.setImageBitmap(image);
+    }
+
 
     void setData() {
         JSONObject user = Utility.USER;

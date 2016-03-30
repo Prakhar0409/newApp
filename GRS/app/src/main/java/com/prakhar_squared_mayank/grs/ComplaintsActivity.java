@@ -1,6 +1,7 @@
 package com.prakhar_squared_mayank.grs;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +39,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -47,15 +51,17 @@ import java.util.Map;
 public class ComplaintsActivity extends AppCompatActivity {
 
     String imageString;
-    String user_id="2";
+    int user_id,pic_id=0;
     Bitmap bitmap = null;
     Menu menu;
+    String username,password;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private CustomViewPager viewPager;
     MyComplaintsFragment myComplaintsFragment;
     OthersComplaintsFragment othersComplaintsFragment;
     boolean paused = false;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +72,26 @@ public class ComplaintsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        CookieManager manager = new CookieManager( null, CookiePolicy.ACCEPT_ALL );
+        CookieHandler.setDefault(manager);
+        // Session class instance
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
 
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        username = user.get(SessionManager.KEY_USERNAME);
+
+        // email
+        password = user.get(SessionManager.KEY_PASSWORD);
+
+        if(username==null || password==null){
+            session.logoutUser();
+        }else{
+            loginUser();
+        }
 
         viewPager = (CustomViewPager) findViewById(R.id.viewpager);
         viewPager.setPagingEnabled(false);
@@ -75,9 +99,118 @@ public class ComplaintsActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        getImageString(6);
+
+//        if(user_id==0){
+//            session.logoutUser();
+//            Intent it=new Intent(this,LoginActivity.class);
+//            startActivity(it);
+//        }
+
+      //  editor.putInt("sPUserId",user_id);
+
+      //  getUser();
+        //getImageString(6);
+
+    }
+
+    void loginUser() {
+        String url="http://"+Utility.IP+Utility.LOGIN_URL;
+
+        Map<String, String> params = new HashMap();
+        params.put("username", username);
+        params.put("password", password);
+        JSONObject parameters = new JSONObject(params);
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                boolean success=false;
+                try {
+                    success= (Boolean) response.getBoolean("success");
+                    JSONObject user=null;
+                    Log.d("success", "donno");
+                    if (success){
+                        Log.d("success", "true");
+                        user = response.getJSONObject("user");
+                        Utility.USER=user;
+                        if(user != null){
+                            if(!user.isNull("id")){
+                                user_id=user.getInt("id");
+                                System.out.println("user logged in!!");
+                                Utility.USER=user;
+                                if(myComplaintsFragment==null){
+                                    myComplaintsFragment=new MyComplaintsFragment();
+                                }
+                                if(othersComplaintsFragment==null){
+                                    othersComplaintsFragment=new OthersComplaintsFragment();
+                                }
+                                myComplaintsFragment.getData();
+                                othersComplaintsFragment.getData();
+                                pic_id=1;
+                                if(!user.isNull("picture_id")){
+                                    pic_id=user.getInt("picture_id");
+                                    getImageString(pic_id);
+                                }
+
+                            }else{
+                                session.logoutUser();
+                            }
+                            Log.d("user_null", "not null");
+                        }
+                    }else{
+                        Log.d("success", "false");
+                        session.logoutUser();
+                    }
+                } catch (JSONException e) {
+                    Utility.showMsg(getApplicationContext(),"Login Failed");
+                    e.printStackTrace();
+                }
+                System.out.println(response);
+                System.out.println(success);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("Volley failed");
+            }
+        }
+        );
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
+    }
 
 
+    public void getUser(){
+        String url="http://"+Utility.IP+Utility.USERPROFILE;
+        Log.d("Url hit was:", url);
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject user= response.getJSONObject("user");
+
+                    if(user.isNull("picture_id")){
+                        Utility.showMsg(getApplicationContext(),"Bad Luck. No Image Found!");
+                    }else{
+                        pic_id=user.getInt("picture_id");
+                        getImageString(pic_id);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("Volley failed");
+            }
+        });
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 
     public void getImageString(int id){
@@ -166,10 +299,7 @@ public class ComplaintsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id==R.id.action_profile){
+       if(id==R.id.action_profile){
             //changeImage();
             Intent it = new Intent(this, ProfileActivity.class);
             startActivity(it);
@@ -194,7 +324,10 @@ public class ComplaintsActivity extends AppCompatActivity {
             Intent it = new Intent(this, SubmitComplaintActivity.class);
             startActivity(it);
             return true;
+        }else if(id==R.id.action_logout){
+            session.logoutUser();
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -221,9 +354,9 @@ public class ComplaintsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         myComplaintsFragment = new MyComplaintsFragment();
-        adapter.addFragment(myComplaintsFragment, "Complaints Affecting Me");
+        adapter.addFragment(myComplaintsFragment, "Affecting Me");
         othersComplaintsFragment = new OthersComplaintsFragment();
-        adapter.addFragment(othersComplaintsFragment, "Other's Complaints");
+        adapter.addFragment(othersComplaintsFragment, "Made to Me");
         viewPager.setAdapter(adapter);
     }
 

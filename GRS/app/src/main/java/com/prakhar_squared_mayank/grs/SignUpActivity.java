@@ -185,27 +185,31 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
         String url="http://"+Utility.IP+Utility.UPLOADUSERDATA;
         Map<String, String> params = new HashMap();
-
-        String hostel=hostels.getSelectedItem().toString();
+        String hostel="None";
+        if(hostels.getSelectedItem()!=null) {
+            hostel = hostels.getSelectedItem().toString();
+        }
         int hostel_id=0;
-        for(int i=0;i<hostelsJson.length();i++) {
-            String name = "";
-            try {
-                JSONObject hostelJ = hostelsJson.getJSONObject(i);
-                String hostelName = hostelJ.getString("hostel_name");
-                if(hostelName.equals(hostel)){
-                    hostel_id=hostelJ.getInt("id");
+        if(hostelsJson!=null) {
+            for (int i = 0; i < hostelsJson.length(); i++) {
+                String name = "";
+                try {
+                    JSONObject hostelJ = hostelsJson.getJSONObject(i);
+                    String hostelName = hostelJ.getString("hostel_name");
+                    if (hostelName.equals(hostel)) {
+                        hostel_id = hostelJ.getInt("id");
+                    }
+                } catch (JSONException e) {
+                    Log.d("eror", "aagayi");
+                    e.printStackTrace();
                 }
-            }
-            catch(JSONException e) {
-                Log.d("eror","aagayi");
-                e.printStackTrace();
             }
         }
         params.put("first_name", fnameET.getText().toString().trim());
         params.put("last_name", lnameET.getText().toString().trim());
         params.put("username", usernameET.getText().toString().trim());
         params.put("password", passwordET.getText().toString().trim());
+
         //params.put("registration_key", "1");
         //params.put("registration_id", "1");
         //params.put("reset_password_key", "not_allowed_currently");
@@ -213,6 +217,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         params.put("hostel_id", Integer.toString(hostel_id));
         //params.put("degree_name", degree);
         params.put("picture_id", Integer.toString(pic_id));
+        System.out.println("Picture ID BITCH!::"+Integer.toString(pic_id));
+
         params.put("year_of_degree", yearOfJoiningET.getText().toString().trim());
         JSONObject parameters = new JSONObject(params);
         Log.d("Url hit was:", url);
@@ -226,14 +232,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         try {
                             JSONObject user = response.getJSONObject("user");
                             if(user !=null){
-                                user_id=user.getInt("id");
-                                Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
-
-                                showComplaintsActivity(user_id,pic_id);
+                                if(!user.isNull("id")){
+                                    user_id=user.getInt("id");
+                                    Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
+                                    System.out.println("Signed up with UserID : " + Integer.toString(user_id));
+                                    showComplaintsActivity(user_id, pic_id,user);
+                                }else{
+                                    Utility.showMsg(getApplicationContext(), ": Unable to register : ");
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        System.out.println(response);
                         Utility.showMsg(getApplicationContext(), response.toString());
                     }
                 },
@@ -262,18 +273,23 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         //Disimissing the progress dialog
                          loading.dismiss();
                         //Showing toast message of the response
-                        int pic_id=1;
+                        int pic_id=0;
                         try {
                             JSONObject res= new JSONObject(s);
-                            JSONObject data=res.getJSONObject("data");
-                            pic_id=data.getInt("id");
+                            //JSONObject data=res.getJSONObject("image");
+                            if(!res.isNull("image")){
+                                pic_id=res.getInt("image");
+                            }
+
                             System.out.println("pic_id : " + pic_id);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Utility.showMsg(getApplicationContext(), s);
                         uploadData(pic_id);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -350,7 +366,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    void showComplaintsActivity(int user_id,int pic_id) {
+    void showComplaintsActivity(int user_id,int pic_id,JSONObject user) {
+
+
+
         Intent it = new Intent(this, ComplaintsActivity.class);
         it.putExtra("user_id",user_id);
         it.putExtra("pic_id",pic_id);

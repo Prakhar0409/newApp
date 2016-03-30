@@ -66,7 +66,7 @@ public class MyComplaintsFragment extends Fragment {
         message = (TextView) v.findViewById(R.id.msg_fmc);
         message.setText("Loading Data...");
 
-        getData();
+       // getData();
         return v;
     }
 

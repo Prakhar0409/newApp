@@ -33,7 +33,8 @@ public class Utility {
      DOWNLOADIMAGE="/image/download",
      COMPLAINTDOMAINS="/complaint/domains",
      COMPLAINTLEVELS="/complaint/levels",
-     UPLOADUSERDATA="/user/signup";
+     UPLOADUSERDATA="/user/signup",
+     COMPLAINTSMADETO="/complaint/complaints/solve";
     public static String POSTSTATUS="/complaint/status";
     public static String POSTSTATUSCOMMENT="/complaint/status/comment";
     public static String GETSTATUSCOMMENT="/comments/status";
@@ -41,6 +42,8 @@ public class Utility {
     public static String MARKRESOLVED="/complaint/mark_resolve";
     public static String BOOKMARKCOMPLAINTS="/complaint/complaints/bookmarked";
     public static String COMPLAINTDETAILS="/complaint/create";
+    public static String USERPROFILE="/user/profile";
+
 
     public static String USERSNGROUPS="/user_base";
     public static List<String> Users=new ArrayList<String>();
