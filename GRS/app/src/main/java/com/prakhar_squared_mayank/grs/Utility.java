@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,10 @@ public class Utility {
     public static String POSTWALLCOMMENT="/complaint/comment";
     public static String BOOKMARKCOMPLAINTS="/complaint/comment";
     public static String COMPLAINTDETAILS="/complaint/create";
-    public static String USERSNGROUPS="";
+    public static String USERSNGROUPS="/user_base";
+    public static List<String> Users=new ArrayList<String>();
+    public static List<String> Groups=new ArrayList<String>();
+    public static List<String> USERBASE=new ArrayList<String>();
 
     public static JSONObject USER=null;
     public static List<ComplaintLevel> complaintLevels=null;

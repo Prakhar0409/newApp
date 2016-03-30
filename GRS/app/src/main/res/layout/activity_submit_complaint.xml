@@ -42,20 +42,33 @@
             android:background="#201956"
             android:layout_marginTop="5dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Complaint Domain"
-            android:textSize="21dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"/>
-        <Spinner
-            android:id="@+id/domain_asc"
-            android:layout_width="250dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:prompt="@string/spinner_title"/>
+        <LinearLayout
+            android:id="@+id/domainSpinnerLL"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complaint Domain"
+                android:textSize="21dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"/>
+            <Spinner
+                android:id="@+id/domain_asc"
+                android:layout_width="250dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:prompt="@string/spinner_title"/>
 
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="290dp"
+                android:layout_height="1dp"
+                android:background="#201956"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
 
 
         <!--<AutoCompleteTextView-->
@@ -66,12 +79,6 @@
             <!--android:layout_marginTop="5dp"/>-->
         <!-- -->
 
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="290dp"
-            android:layout_height="1dp"
-            android:background="#201956"
-            android:layout_marginTop="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,30 +143,108 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/concerningLL"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:text="Resolving Rights: "/>
-            <AutoCompleteTextView
-                android:id="@+id/resolving_right_asc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Search for people/group"/>
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="Affects: "/>
+                <AutoCompleteTextView
+                    android:id="@+id/concerning_asc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Search for people/group"/>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/concerning_listview_asc"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp">
+            </ListView>
+
+
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/resolving_right_listview_asc"
+
+        <LinearLayout
+            android:id="@+id/madeToLL"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp">
-        </ListView>
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="Comaplint To: "/>
+                <AutoCompleteTextView
+                    android:id="@+id/made_to_asc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Search for people/group"/>
+            </LinearLayout>
+            <ListView
+                android:id="@+id/made_to_listview_asc"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp">
+            </ListView>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/resolvingRightsLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="Resolving Rights: "/>
+                <AutoCompleteTextView
+                    android:id="@+id/resolving_right_asc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/primary_text_light"
+                    android:layout_weight="1"
+                    android:hint="Search for people/group"/>
+            </LinearLayout>
+            <ListView
+                android:id="@+id/resolving_right_listview_asc"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp">
+            </ListView>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,65 +37,167 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 public class SubmitComplaintActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener{
-    AutoCompleteTextView resolveACT;
-    int lev;
+    AutoCompleteTextView resolveACT,concernACT,madeToACT;
+    LinearLayout resolveLL,concernLL,madeToLL,domainSpinnerLL;
+    int lev,domain_id;
     Spinner complaintLevels,complaintDomains;
     List<ComplaintDomain> Domains;
     TextView titleTV, descTV;
     ImageView picIV;
     FrameLayout picFL;
     Bitmap scaledBitmap=null;
-    ListView resolveLV;
+    ListView resolveLV,concernLV,madeToLV;
     String levelSelected="", domainSelected="";
     boolean FlagPicSelected=false;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> resolveADT,concernADT,madeToADT,adapter,resolveLVADT,concernLVADT,madeToLVADT;
+    String[] resolvers=new String[1],concerns=new String[1], madetos = new String[1];
+    List<String> resolversList=new ArrayList<String>(),concernsList=new ArrayList<String>(), madetosList = new ArrayList<String>();
+    Map resolversSend=new HashMap<Integer,Integer>();
 
     //These values show in autocomplete
-    String item[]={
-            "January", "February", "March", "April",
-            "May", "June", "July", "August",
-            "September", "October", "November", "December"
-    };
+    List<String> item=new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_complaint);
 
+        item.add("aihk");
+        item.add("aawd");
+        item.add("abac");
+        item.add("dnakj");
+        item.add("newas");
+        item.add("iuewh");
+        item.add("dnahjdnq");
+        item.add("abca");
 
 //        domainACT = (AutoCompleteTextView) findViewById(R.id.domain_asc);
+        resolveLL = (LinearLayout) findViewById(R.id.resolvingRightsLL);
+        concernLL = (LinearLayout) findViewById(R.id.concerningLL);
+        madeToLL = (LinearLayout) findViewById(R.id.madeToLL);
+        domainSpinnerLL=(LinearLayout)findViewById(R.id.domainSpinnerLL);
+
         resolveACT = (AutoCompleteTextView) findViewById(R.id.resolving_right_asc);
+        concernACT=(AutoCompleteTextView) findViewById(R.id.concerning_asc);
+        madeToACT=(AutoCompleteTextView) findViewById(R.id.made_to_asc);
         titleTV = (TextView) findViewById(R.id.title_asc);
         descTV = (TextView) findViewById(R.id.desc_asc);
 
         resolveLV = (ListView) findViewById(R.id.resolving_right_listview_asc);
+        concernLV =(ListView) findViewById(R.id.concerning_listview_asc);
+        madeToLV =(ListView) findViewById(R.id.made_to_listview_asc);
 
         picIV = (ImageView) findViewById(R.id.pic_asc);
         picFL = (FrameLayout) findViewById(R.id.pic_frame_asc);
         picFL.setOnClickListener(this);
 
-
         complaintLevels= (Spinner) findViewById(R.id.level_asc);
         complaintLevels.setOnItemSelectedListener(this);
         complaintDomains= (Spinner) findViewById(R.id.domain_asc);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
 
-        resolveACT.setThreshold(5);
+        concernADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item,item);
+        madeToADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
+        resolveADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
+        concernLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, concernsList);
+        madeToLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, madetosList);
+        resolveLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, resolversList);
 
+
+        resolveACT.setThreshold(1);
+        madeToACT.setThreshold(1);
+        concernACT.setThreshold(1);
         //Set adapter to AutoCompleteTextView
-        resolveACT.setAdapter(adapter);
+        resolveACT.setAdapter(resolveADT);
+        concernACT.setAdapter(concernADT);
+        madeToACT.setAdapter(madeToADT);
         //resolveACT.setOnItemSelectedListener(this);
 
+        resolveLL.setVisibility(LinearLayout.GONE);
+        concernLL.setVisibility(LinearLayout.GONE);
+        madeToLL.setVisibility(LinearLayout.GONE);
 
-        //resolveACT.setOnItemClickListener(this);
+        resolveACT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+                // String a=parent.getSelectedItem().toString();
+                String a = resolveACT.getText().toString();
+                for (int i = 0; i < Utility.Users.size(); i++) {
+                    if (a.equals(Utility.Users.get(i))) {
+                        resolversList.add(a);
+                        break;
+                    }
+                }
+                for (int i = 0; i < Utility.Groups.size(); i++) {
+                    if (a.equals(Utility.Groups.get(i))) {
+                        resolversList.add(a);
+                        break;
+                    }
+                }
+                resolvers = new String[resolversList.size()];
+                resolversList.toArray(resolvers);
+                Utility.showMsg(getApplicationContext(), "selected : " + resolveACT.getText().toString());
+                System.out.println("reached set on item click listneer");
+                resolveLVADT.notifyDataSetChanged();
+            }
+        });
 
+        concernACT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos,long id) {
+                // String a=parent.getSelectedItem().toString();
+                String a=concernACT.getText().toString();
+                for(int i=0;i<Utility.Users.size();i++){
+                    if(a.equals(Utility.Users.get(i))){
+                        concernsList.add(a);
+                        break;
+                    }
+                }
+                for(int i=0;i<Utility.Groups.size();i++){
+                    if(a.equals(Utility.Groups.get(i))){
+                        concernsList.add(a);
+                        break;
+                    }
+                }
+                concerns=new String[concernsList.size()];
+                concernsList.toArray(concerns);
+                Utility.showMsg(getApplicationContext(),"selected : "+concernACT.getText().toString());
+                System.out.println("reached set on item click listneer");
+                concernLVADT.notifyDataSetChanged();
+            }
+        });
+
+        madeToACT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos,long id) {
+                // String a=parent.getSelectedItem().toString();
+                String a=madeToACT.getText().toString();
+                for(int i=0;i<Utility.Users.size();i++){
+                    if(a.equals(Utility.Users.get(i))){
+                        madetosList.add(a);
+                        break;
+                    }
+                }
+                for(int i=0;i<Utility.Groups.size();i++){
+                    if(a.equals(Utility.Groups.get(i))){
+                        madetosList.add(a);
+                        break;
+                    }
+                }
+                madetos=new String[madetosList.size()];
+                madetosList.toArray(madetos);
+                Utility.showMsg(getApplicationContext(),"selected : "+madeToACT.getText().toString());
+                System.out.println("reached set on item click listneer");
+                madeToLVADT.notifyDataSetChanged();
+            }
+        });
 
 
         getData();
@@ -106,6 +209,24 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.submit_complaint_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_submit_scm) {
+            if(true){//checkData()) {
+                submitComplaint();
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -139,11 +260,6 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.action_submit_scm:
-                if(true){//checkData()) {
-                    submitComplaint();
-                }
-                break;
             case R.id.pic_frame_asc:
                 selectUserPic();
                 break;
@@ -182,7 +298,8 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading data...","Please wait...",false,false);
         String url="http://"+Utility.IP+Utility.COMPLAINTDETAILS;
         //finding the domain_id;
-        int domain_id = 0;
+
+
         String s=complaintDomains.getSelectedItem().toString();
         for(int i=0;i<Domains.size();i++){
             if(s.equals(Domains.get(i).complaintDomainName)){
@@ -202,7 +319,7 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         }
         params.put("image_id", Integer.toString(pic_id));
         params.put("level_id", Integer.toString(lev));
-        params.put("domain_id",Integer.toString(domain_id));
+        params.put("domain_id", Integer.toString(domain_id));
 
         JSONObject parameters = new JSONObject(params);
         Log.d("Url hit was:", url);
@@ -225,10 +342,13 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                     }
                 });
         volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
-
     }
 
     public void MiscStub(){
+        resolveLL.setVisibility(LinearLayout.VISIBLE);
+        concernLL.setVisibility(LinearLayout.VISIBLE);
+        madeToLL.setVisibility(LinearLayout.VISIBLE);
+
         getUsersNGroups();
         ListView modeList = new ListView(this);
         String[] stringArray = new String[] { "Bright Mode", "Normal Mode" };
@@ -245,15 +365,42 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                     @Override
                     public void onResponse(JSONObject response) {
                         loading.dismiss();
-                        JSONArray domainsJson;
-                        // TODO INCOMPLETE RESPONSE PARSING
+                        try {
+                            JSONArray users=response.getJSONArray("users");
+                            JSONArray groups=response.getJSONArray("groups");
+                            for(int i=0;i<users.length();i++){
+                                Utility.Users.add(users.getJSONObject(i).getString("username"));
+                            }
+                            for (int i=0;i<groups.length();i++){
+                                Utility.Groups.add(groups.getJSONObject(i).getString("group_name"));
+                            }
+                            List<String> tp= new ArrayList<String>();
+                            tp.addAll(Utility.Users);
+                            tp.addAll(Utility.Groups);
+//                            item.clear();
+
+                            item=tp;
+                            resolveADT = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, item);
+                            resolveACT.setAdapter(resolveADT);
+                            //resolveADT.notifyDataSetChanged();
+                            concernACT.setAdapter(concernADT);
+                            //concernADT.notifyDataSetChanged();
+                            madeToADT.notifyDataSetChanged();
+                            for(int i=0;i<item.size();i++){
+                                System.out.print(item.get(i)+"   :   ");
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.print(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         loading.dismiss();
-                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
+                        Utility.showMsg(getApplicationContext(), "volley User groups error");//, Toast.LENGTH_LONG).show();
                     }
                 });
         volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
@@ -269,15 +416,21 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                 String item = parent.getItemAtPosition(position).toString();
                     for(int i=0;i<Utility.complaintLevels.size();i++){
                         ComplaintLevel c=Utility.complaintLevels.get(i);
-                        if(c.getLevel_name().equals(item)){
+                        if(c.getLevel_name().equals(item) && item.equals("Miscellaneous")) {
+                            lev = c.getId();
+                            MiscStub();
+                            domainSpinnerLL.setVisibility(View.GONE);
+                            //domain_id=0;                        // DONE CHANGE ACCORDING TO BACKEND
+                            break;
+                        }else if(c.getLevel_name().equals(item)){
                             lev=c.getId();
-                            if(item.equals("Miscellaneous")){
-                                MiscStub();
-                            }
+                            resolveLL.setVisibility(LinearLayout.GONE);
+                            concernLL.setVisibility(LinearLayout.GONE);
+                            madeToLL.setVisibility(LinearLayout.GONE);
+                            domainSpinnerLL.setVisibility(View.VISIBLE);
                             break;
                         }
                     }
-
                 Domains = new ArrayList<ComplaintDomain>();
                 getDomains();
                 Utility.showMsg(parent.getContext(), "Selected: " + item);
@@ -351,20 +504,17 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
 
     public void setComplaintLevelSpinner() {
         List<String> complaintsLevelNames= new ArrayList<String>();
-
         for(int i=0; i < Utility.complaintLevels.size() ;i++) {
             complaintsLevelNames.add(Utility.complaintLevels.get(i).getLevel_name());
         }
-
-
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, complaintsLevelNames);
-
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         complaintLevels.setAdapter(dataAdapter);
     }
 
     public void setDomainSpinner() {
+
         List<String> complaintsDomainNames= new ArrayList<String>();
 
         for(int i=0; i < Domains.size() ;i++) {
