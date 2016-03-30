@@ -51,6 +51,7 @@ public class Utility {
     public static List<JSONObject> UsersData=new ArrayList<JSONObject>();
     public static List<JSONObject> GroupsData=new ArrayList<JSONObject>();
     public static List<String> USERBASE=new ArrayList<String>();
+    public static String VALIDATIONREQUESTS="/user/validation";
 
 
     public static String CHANGEVOTE="/complaint/vote";

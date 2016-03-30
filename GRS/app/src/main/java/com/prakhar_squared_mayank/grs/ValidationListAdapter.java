@@ -64,7 +64,7 @@ public class ValidationListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.usernameTV = (TextView) convertView.findViewById(R.id.username_vrr);
             holder.groupTV = (TextView) convertView.findViewById(R.id.group_vrr);
-            holder.positionTV = (TextView) convertView.findViewById(R.id.post_vrr);
+//            holder.positionTV = (TextView) convertView.findViewById(R.id.post_vrr);
             holder.acceptIV = (ImageView) convertView.findViewById(R.id.accept_vrr);
             holder.rejectIV = (ImageView) convertView.findViewById(R.id.reject_vrr);
             holder.profilePicIV = (ImageView) convertView.findViewById(R.id.profile_pic_vrr);
@@ -81,25 +81,25 @@ public class ValidationListAdapter extends BaseAdapter {
 
         String username = "";
         String group = "";
-        String post = "";
+//        String post = "";
 
-        if (jsonObject.has("x")) {                  // TODO: 28/03/16
+        if (jsonObject.has("to_user_id")) {                  // TODO: 28/03/16
             username = (jsonObject.optString("x")).toUpperCase();
         }
 
-        if (jsonObject.has("y")) {                  // TODO: 28/03/16
+        if (jsonObject.has("group_id")) {                  // TODO: 28/03/16
             group = jsonObject.optString("y");
         }
 
-        if (jsonObject.has("z")) {                  // TODO: 28/03/16
-            post = jsonObject.optString("z");
-        }
+//        if (jsonObject.has("z")) {                  // TODO: 28/03/16
+//            post = jsonObject.optString("z");
+//        }
 
 
         holder.usernameTV.setText(username);
 
         holder.groupTV.setText(group);
-        holder.positionTV.setText(post);
+//        holder.positionTV.setText(post);
 
         holder.acceptIV.setOnClickListener(new View.OnClickListener() {         // TODO: 27/03/16
             @Override
@@ -121,7 +121,7 @@ public class ValidationListAdapter extends BaseAdapter {
     private static class ViewHolder {
         public TextView usernameTV;
         public TextView groupTV;
-        public TextView positionTV;
+//        public TextView positionTV;
         public ImageView acceptIV;
         public ImageView rejectIV, profilePicIV;
     }
