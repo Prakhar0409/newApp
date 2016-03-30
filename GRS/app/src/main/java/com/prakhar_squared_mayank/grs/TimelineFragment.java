@@ -93,7 +93,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
     }
 
     public void getTimeLineData( ){
-        String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
+        String url1="http://"+Utility.IP+"/status/complaint?complaint_id="+complaintID;
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

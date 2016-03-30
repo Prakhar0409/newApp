@@ -71,7 +71,7 @@ public class MyComplaintsFragment extends Fragment {
     }
 
     void getData() {
-        String url1="http://"+LoginActivity.ip+"/complaint/complaints/concern";
+        String url1="http://"+Utility.IP+"/complaint/complaints/concern";
 
         System.out.println("Url being hit is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

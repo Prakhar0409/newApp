@@ -66,7 +66,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void getData( ){
-        String url1="http://"+LoginActivity.ip+Utility.GETSTATUSCOMMENT+"?status_id="+statusID;
+        String url1="http://"+Utility.IP+Utility.GETSTATUSCOMMENT+"?status_id="+statusID;
 
         System.out.println("Url being hit comment data is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

@@ -33,7 +33,8 @@ public class Utility {
      DOWNLOADIMAGE="/image/download",
      COMPLAINTDOMAINS="/complaint/domains",
      COMPLAINTLEVELS="/complaint/levels",
-     UPLOADUSERDATA="/user/signup";
+     UPLOADUSERDATA="/user/signup",
+     COMPLAINTSMADETO="/complaint/complaints/solve";
     public static String POSTSTATUS="/complaint/status";
     public static String POSTSTATUSCOMMENT="/complaint/status/comment";
     public static String GETSTATUSCOMMENT="/comments/status";

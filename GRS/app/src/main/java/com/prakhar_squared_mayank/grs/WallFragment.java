@@ -92,7 +92,7 @@ public class WallFragment extends Fragment implements View.OnClickListener {
     }
 
     public void getCommentData( ){
-        String url1="http://"+LoginActivity.ip+"/comments/complaint?complaint_id="+complaintID;
+        String url1="http://"+Utility.IP+"/comments/complaint?complaint_id="+complaintID;
 
         System.out.println("Url being hit for comment data is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {

@@ -41,9 +41,9 @@ import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static String ip="192.168.43.147:8000";//"10.0.2.2:8000";
+    //public static String ip="192.168.43.147:8000";//"10.0.2.2:8000";
 
-
+    SessionManager session;
     EditText useridET, passwordET;
     TextView signupTV;
     Button loginButton;
@@ -52,6 +52,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //new session manager
+        session = new SessionManager(getApplicationContext());
+
 
         useridET = (EditText) findViewById(R.id.userid_al);
         passwordET = (EditText) findViewById(R.id.pass_al);
@@ -144,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             user_id= user.getInt("id");
             Intent it = new Intent(this, ComplaintsActivity.class);
             Log.d("next activity","yeah");
+            session.createLoginSession(useridET.getText().toString(), passwordET.getText().toString());
             it.putExtra("user_id",user_id);
             startActivity(it);
         } catch (JSONException e) {
