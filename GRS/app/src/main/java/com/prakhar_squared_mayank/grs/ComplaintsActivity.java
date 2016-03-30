@@ -53,6 +53,9 @@ public class ComplaintsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private CustomViewPager viewPager;
+    MyComplaintsFragment myComplaintsFragment;
+    OthersComplaintsFragment othersComplaintsFragment;
+    boolean paused = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,10 +199,31 @@ public class ComplaintsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onResume() {
+        if(paused) {
+            myComplaintsFragment.getData();
+            othersComplaintsFragment.getData();
+        }
+        paused = false;
+        Log.e("DEBUG", "onResume of ComplaintA");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        paused = true;
+        Log.e("DEBUG", "OnPause of ComplaintA");
+        super.onPause();
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MyComplaintsFragment(), "Complaints Affecting Me");
-        adapter.addFragment(new OthersComplaintsFragment(), "Other's Complaints");
+        myComplaintsFragment = new MyComplaintsFragment();
+        adapter.addFragment(myComplaintsFragment, "Complaints Affecting Me");
+        othersComplaintsFragment = new OthersComplaintsFragment();
+        adapter.addFragment(othersComplaintsFragment, "Other's Complaints");
         viewPager.setAdapter(adapter);
     }
 

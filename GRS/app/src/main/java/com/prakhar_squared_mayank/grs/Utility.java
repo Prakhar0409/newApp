@@ -34,13 +34,17 @@ public class Utility {
      COMPLAINTLEVELS="/complaint/levels",
      UPLOADUSERDATA="/user/signup";
     public static String POSTSTATUS="/complaint/status";
-    public static String POSTSTATUSCOMMENT="/status/comment";
-    public static String GETSTATUSCOMMENT="complaint/status/comment";
+    public static String POSTSTATUSCOMMENT="/complaint/status/comment";
+    public static String GETSTATUSCOMMENT="/comments/status";
     public static String POSTWALLCOMMENT="/complaint/comment";
-    public static String MARKRESOLVED="complaint/mark_resolve";
-    public static String BOOKMARKCOMPLAINTS="/complaint/comment";
+    public static String MARKRESOLVED="/complaint/mark_resolve";
+    public static String BOOKMARKCOMPLAINTS="/complaint/complaints/bookmarked";
     public static String COMPLAINTDETAILS="/complaint/create";
     public static String USERSNGROUPS="";
+    public static String CHANGEVOTE="/complaint/vote";
+    public static String NOTIFICATION="/notifications/all";
+    public static String FOLLOW="/complaint/follow";
+    public static String UNFOLLOW="/complaint/unfollow";
 
 
     public static JSONObject USER=null;

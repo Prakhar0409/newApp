@@ -118,6 +118,24 @@ public class ComplaintListAdapter extends BaseAdapter {
             complaintID = jsonObject.optString("complaint_id");
         }
 
+        int voteStatus = jsonObject.optInt("vote_made", -2);
+        if(voteStatus == -2) {
+            voteStatus = jsonObject.optJSONObject("vote_made").optInt("vote_type");
+        }
+        Log.d("CLA", "for "+complaintID+" vote status "+voteStatus);
+
+        if(voteStatus == 0) {
+            holder.upIV.setImageResource(R.drawable.up_grey);
+            holder.downIV.setImageResource(R.drawable.down_grey);
+        }
+        else if(voteStatus == -1) {
+            holder.upIV.setImageResource(R.drawable.up_grey);
+            holder.downIV.setImageResource(R.drawable.down_red);
+        }
+        else if(voteStatus == 1) {
+            holder.upIV.setImageResource(R.drawable.up_red);
+            holder.downIV.setImageResource(R.drawable.down_grey);
+        }
 
         boolean bookmarked = false;
         if (jsonObject.has("bookmarked")) {

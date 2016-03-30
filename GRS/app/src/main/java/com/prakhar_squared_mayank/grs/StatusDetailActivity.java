@@ -48,9 +48,10 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_detail);
 
-        statusID = getIntent().getStringExtra("STATUS_ID");
-        statusTitle = getIntent().getStringExtra("STATUS_NAME");
-        statusDesc = getIntent().getStringExtra("STATUS_DESC");
+        statusID = getIntent().getExtras().getString("STATUS_ID");
+        Log.d("SDA", "id received is " + statusID + " size "+getIntent().getExtras().size());
+        statusTitle = getIntent().getExtras().getString("STATUS_NAME");
+        statusDesc = getIntent().getExtras().getString("STATUS_DESC");
 
         fab = (ImageView) findViewById(R.id.fab_asd);
         fab.setOnClickListener(this);
@@ -67,7 +68,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
     public void getData( ){
         String url1="http://"+LoginActivity.ip+Utility.GETSTATUSCOMMENT+"?status_id="+statusID;
 
-        System.out.println("Url being hit is : " + url1);
+        System.out.println("Url being hit comment data is : " + url1);
         JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -148,6 +149,7 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
                     public void onResponse(String s) {
                         //Disimissing the progress dialog
                         loading.dismiss();
+                        getData();
                         //Showing toast message of the response
 
                     }
@@ -158,7 +160,6 @@ public class StatusDetailActivity extends AppCompatActivity implements View.OnCl
                         //Dismissing the progress dialog
                         loading.dismiss();
                         //Showing toast
-                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override

@@ -73,9 +73,9 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         JSONObject Complaint = null;
         try {
 
-            resolved = Complaint.getBoolean("resolved");
-
             Complaint = new JSONObject(complaintString);
+
+            resolved = Complaint.getBoolean("resolved");
             TextView c_title = (TextView) findViewById(R.id.title_acd);
             if(!resolved) {
                 c_title.setText(Complaint.getString("complaint_title"));
@@ -88,7 +88,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
             c_description.setText(Complaint.getString("complaint_details"));
 
             c_upcount=(TextView) findViewById(R.id.up_count_acd);
-            if(Complaint.getString("upvotes_count").equals("null")) {
+            if(!Complaint.has("upvotes_count")) {
                 c_upcount.setText("0");
             }
             else {
@@ -96,7 +96,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
             }
 
             c_downcount=(TextView) findViewById(R.id.down_count_acd);
-            if(Complaint.getString("downvotes_count").equals("null")) {
+            if(!Complaint.has("downvotes_count")) {
                 c_downcount.setText("0");
             }
             else {
@@ -124,17 +124,24 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
             resolvable = Complaint.getBoolean("to_resolve");
             if(!resolvable) {
-                MenuItem item = menu.findItem(R.id.action_mark_resolved);
-                item.setVisible(false);
-                this.invalidateOptionsMenu();
+                if(menu != null) {
+                    MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                    item.setVisible(false);
+                    this.invalidateOptionsMenu();
+                }
             }
             else {
-                MenuItem item = menu.findItem(R.id.action_mark_resolved);
-                item.setVisible(true);
-                this.invalidateOptionsMenu();
+                if(menu != null) {
+                    MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                    item.setVisible(true);
+                    this.invalidateOptionsMenu();
+                }
             }
 
-            voteStatus = Complaint.optInt("vote_status", -2);
+            voteStatus = Complaint.optInt("vote_made", -2);
+            if(voteStatus == -2) {
+                voteStatus = Complaint.optJSONObject("vote_made").optInt("vote_type");
+            }
             complaintID = Complaint.optInt("id", 0);
 
             c_pic = (ImageView) findViewById(R.id.complaint_pic_acd);
@@ -151,12 +158,13 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
         bookmarkIV = (ImageView) findViewById(R.id.bookmark_acd);
         setBookmark(bookmarkedA);
+        bookmarkIV.setOnClickListener(this);
 
         upIV = (ImageView) findViewById(R.id.up_image_acd);
         upIV.setOnClickListener(this);
 
-        downIV = (ImageView) findViewById(R.id.up_image_acd);
-        upIV.setOnClickListener(this);
+        downIV = (ImageView) findViewById(R.id.down_image_acd);
+        downIV.setOnClickListener(this);
 
         setVoteStatus();
 
@@ -208,6 +216,95 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         return true;
     }
 
+    void changeBookmarkStatus() {
+        final ProgressDialog loading = ProgressDialog.show(this,"Casting Vote...","Please wait...",false,false);
+        String url="http://"+Utility.IP;   //+Utility.CHANGEVOTE+"?complaint_id="+complaintID+"&vote_type="+vo;
+        if(bookmarkedA) {
+            url = url + Utility.UNFOLLOW;
+        }
+        else
+        {
+            url = url + Utility.FOLLOW;
+        }
+        url = url + "?complaint_id="+complaintID;
+        bookmarkedA = !bookmarkedA;
+
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                loading.dismiss();
+                setBookmark(bookmarkedA);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+                loading.dismiss();
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
+    }
+
+    void changeVoteStatus(final int vo) {
+        final ProgressDialog loading = ProgressDialog.show(this,"Casting Vote...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.CHANGEVOTE+"?complaint_id="+complaintID+"&vote_type="+vo;
+
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                loading.dismiss();
+                updateVoteStatus(vo);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+                loading.dismiss();
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
+    }
+
+    void updateVoteStatus(int vo) {
+        if(voteStatus == 0) {
+            if(vo == 1) {
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) + 1) + "");
+            }
+            else if(vo == -1) {
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) + 1) + "");
+            }
+        }
+        else if(voteStatus == 1) {
+            if(vo == 1) {
+            }
+            else if(vo == -1) {
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) - 1) + "");
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) + 1) + "");
+            }
+        }
+        else if(voteStatus == -1) {
+            if(vo == 1) {
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) - 1) + "");
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) + 1) + "");
+            }
+            else if(vo == -1) {
+            }
+        }
+        voteStatus = vo;
+        setVoteStatus();
+    }
+
     void markComplaintResoled() {
         final ProgressDialog loading = ProgressDialog.show(this,"Marking Resolved...","Please wait...",false,false);
         String url="http://"+Utility.IP+Utility.MARKRESOLVED;
@@ -254,7 +351,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
         final LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setPadding(15, 5, 15, 5);
+        ll.setPadding(55, 5, 15, 5);
         final TextView tv = new TextView(this);
         tv.setText("Are you sure you want to mark complaint as resolved?");
 //        final EditText input2 = new EditText(this);
@@ -438,7 +535,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
 
     void setTimeline() {
-        Log.d("CDA", "Setting timeline "+timelineData.toString());
+        Log.d("CDA", "Setting timeline " + timelineData.toString());
         if(timeline != null && timelineData != null) {
             timeline.updateTimeline(timelineData, complaintID);
         }
@@ -455,8 +552,13 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.up_image_acd:
+                changeVoteStatus(1);
                 break;
             case R.id.down_image_acd:
+                changeVoteStatus(-1);
+                break;
+            case R.id.bookmark_acd:
+                changeBookmarkStatus();
                 break;
         }
     }

@@ -86,7 +86,7 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
 
-        resolveACT.setThreshold(5);
+        resolveACT.setThreshold(1);
 
         //Set adapter to AutoCompleteTextView
         resolveACT.setAdapter(adapter);

@@ -21,9 +21,12 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,6 +92,43 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         return mainView;
     }
 
+    public void getTimeLineData( ){
+        String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
+
+        System.out.println("Url being hit is : " + url1);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String success="";
+                try {
+                    if(response.has("data") && !response.isNull("data")){
+                        timelineData = (JSONArray) response.get("data");
+                        if(timelineData != null) {
+                            updateTimeline(timelineData, complaintID);
+                        }
+                    }else{
+                        Utility.showMsg(getActivity(), "Fetch data failed");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("data timeline : "+response);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(getActivity());
+        v.add(req1);
+    }
+
     public void updateTimeline(JSONArray arr, int complaintid) {
         timelineData = arr;
         complaintID = complaintid;
@@ -97,17 +137,18 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
 
     public void makeTimeline() {
         clearLinearLayout();
-        String title1="No data.", id1="";
+        String title1="No data.", id1="", desc1="";
         try {
             title1 = timelineData.getJSONObject(0).getString("status_name");
-            id1 = timelineData.getJSONObject(0).getString("status_id");
+            id1 = timelineData.getJSONObject(0).getInt("id")+"";
+            desc1 = timelineData.getJSONObject(0).getString("detailed_status");
         }
         catch (JSONException e) {
 
         }
         TextView titleTV = (TextView) mainView.findViewById(R.id.text_ft);
         titleTV.setText(title1);
-        final String title2=title1, id2=id1;
+        final String title2=title1, id2=id1, desc2=desc1;
         if(!title1.equals("No data.")) {
             ImageView image = (ImageView) mainView.findViewById(R.id.image_ft);
             image.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +158,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
                     Intent it = new Intent(getActivity(), StatusDetailActivity.class);
                     it.putExtra("STATUS_ID", id2);
                     it.putExtra("STATUS_NAME", title2);
+                    it.putExtra("STATUS_DESC", desc2);
                     getActivity().startActivity(it);
                 }
             });
@@ -128,7 +170,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
             String title="Error with data.", id="", desc="";
             try {
                 title = timelineData.getJSONObject(index).getString("status_name");
-                id = timelineData.getJSONObject(index).getString("status_id");
+                id = timelineData.getJSONObject(index).getInt("id")+"";
                 desc = timelineData.getJSONObject(index).getString("detailed_status");
             }
             catch (JSONException e) {
@@ -145,6 +187,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
 
     public void addChildLayout(final String title, final String id, final String desc){
 
+        Log.d("TF", "The status id is: "+id);
         LayoutInflater layoutInflater=(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         LinearLayout linearLayout = (LinearLayout)mainView.findViewById(R.id.timeline_linear_layout_ft);
@@ -158,7 +201,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TF", "Go to detailed status");
+                Log.d("TF", "Go to detailed status" + id + "," + title + "," + desc);
                 Intent it = new Intent(getActivity(), StatusDetailActivity.class);
                 it.putExtra("STATUS_ID", id);
                 it.putExtra("STATUS_NAME", title);
@@ -189,7 +232,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    void postNewStatus(final String status) {
+    void postNewStatus(final String status, final String status_desc) {
         final ProgressDialog loading = ProgressDialog.show(getActivity(),"Uploading Status...","Please wait...",false,false);
         String url="http://"+Utility.IP+Utility.POSTSTATUS;
         Log.d("Url hit was:",url);
@@ -199,6 +242,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(String s) {
                         //Disimissing the progress dialog
                         loading.dismiss();
+                        getTimeLineData();
                         //Showing toast message of the response
 
                     }
@@ -208,8 +252,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
                     public void onErrorResponse(VolleyError volleyError) {
                         //Dismissing the progress dialog
                         loading.dismiss();
-                        //Showing toast
-                        Utility.showMsg(getActivity(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -220,6 +262,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
                 //Adding parameters
                 params.put("complaint_id_", complaintID+"");
                 params.put("status_name", status);
+                params.put("detailed_status", status_desc);
 
                 //returning parameters
                 return params;
@@ -238,19 +281,23 @@ public class TimelineFragment extends Fragment implements View.OnClickListener {
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setPadding(15, 5, 15, 5);
         final TextView tv = new TextView(getActivity());
-        tv.setText("Status title:");
+        tv.setText("Status:");
         final EditText input2 = new EditText(getActivity());
         input2.setInputType(InputType.TYPE_CLASS_TEXT);
-        input2.setHint("Enter status here");
+        input2.setHint("Status title.");
+        final EditText input3 = new EditText(getActivity());
+        input3.setInputType(InputType.TYPE_CLASS_TEXT);
+        input3.setHint("Status description.");
 
         ll.addView(input2);
+        ll.addView(input3);
         builder.setView(ll);
 
         builder.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(complaintID != -2) {
-                    postNewStatus(input2.getText().toString());
+                    postNewStatus(input2.getText().toString(), input3.getText().toString());
                 }
                 dialog.cancel();
             }
