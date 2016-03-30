@@ -45,6 +45,8 @@ public class Utility {
     public static String USERSNGROUPS="/user_base";
     public static List<String> Users=new ArrayList<String>();
     public static List<String> Groups=new ArrayList<String>();
+    public static List<JSONObject> UsersData=new ArrayList<JSONObject>();
+    public static List<JSONObject> GroupsData=new ArrayList<JSONObject>();
     public static List<String> USERBASE=new ArrayList<String>();
 
 

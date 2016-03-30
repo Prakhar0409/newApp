@@ -31,6 +31,7 @@ public class NotificationsActivity extends AppCompatActivity {
         complaintsAdapter = new NotificationsAdapter(this, getLayoutInflater());
         listView.setAdapter(complaintsAdapter);
 
+        getData();
     }
 
     void getData() {

@@ -3,13 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#95bfea">
+    android:background="#ca9ef1">
 
     <ImageView
         android:id="@+id/pic_nr"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:background="#533bd2"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/notif1"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="20dp"/>
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Suck it up"
-        android:textSize="19dp"
+        android:textSize="17dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="14dp"/>
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

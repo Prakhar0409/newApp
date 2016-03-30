@@ -167,6 +167,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         downIV.setOnClickListener(this);
 
         setVoteStatus();
+        setMenu();
 
         try {
             getTimeLineData();
@@ -207,11 +208,42 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         }
     }
 
+    void setMenu() {
+        if(!resolvable) {
+            if(menu != null) {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(false);
+                this.invalidateOptionsMenu();
+            }
+        }
+        else {
+            if(menu != null) {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(true);
+                this.invalidateOptionsMenu();
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.complaint_detail_menu, menu);
         this.menu = menu;
+        if(!resolvable) {
+            if(menu != null) {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(false);
+                this.invalidateOptionsMenu();
+            }
+        }
+        else {
+            if(menu != null) {
+                MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                item.setVisible(true);
+                this.invalidateOptionsMenu();
+            }
+        }
 
         return true;
     }

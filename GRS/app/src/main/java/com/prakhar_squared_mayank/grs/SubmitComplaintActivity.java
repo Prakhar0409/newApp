@@ -60,6 +60,8 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
     private ArrayAdapter<String> resolveADT,concernADT,madeToADT,adapter,resolveLVADT,concernLVADT,madeToLVADT;
     String[] resolvers=new String[1],concerns=new String[1], madetos = new String[1];
     List<String> resolversList=new ArrayList<String>(),concernsList=new ArrayList<String>(), madetosList = new ArrayList<String>();
+    List<String> resolversIDList=new ArrayList<String>(),concernsIDList=new ArrayList<String>(), madetosIDList = new ArrayList<String>();
+    List<String> resolversTypeList=new ArrayList<String>(),concernsTypeList=new ArrayList<String>(), madetosTypeList = new ArrayList<String>();
     Map resolversSend=new HashMap<Integer,Integer>();
 
     //These values show in autocomplete
@@ -90,10 +92,6 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         titleTV = (TextView) findViewById(R.id.title_asc);
         descTV = (TextView) findViewById(R.id.desc_asc);
 
-        resolveLV = (ListView) findViewById(R.id.resolving_right_listview_asc);
-        concernLV =(ListView) findViewById(R.id.concerning_listview_asc);
-        madeToLV =(ListView) findViewById(R.id.made_to_listview_asc);
-
         picIV = (ImageView) findViewById(R.id.pic_asc);
         picFL = (FrameLayout) findViewById(R.id.pic_frame_asc);
         picFL.setOnClickListener(this);
@@ -111,6 +109,13 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         madeToLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, madetosList);
         resolveLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, resolversList);
 
+
+        resolveLV = (ListView) findViewById(R.id.resolving_right_listview_asc);
+        resolveLV.setAdapter(resolveLVADT);
+        concernLV =(ListView) findViewById(R.id.concerning_listview_asc);
+        concernLV.setAdapter(concernLVADT);
+        madeToLV =(ListView) findViewById(R.id.made_to_listview_asc);
+        madeToLV.setAdapter(madeToLVADT);
 
 
 
@@ -136,12 +141,30 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                 for (int i = 0; i < Utility.Users.size(); i++) {
                     if (a.equals(Utility.Users.get(i))) {
                         resolversList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.UsersData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        resolversIDList.add(idU);
+                        resolversTypeList.add("0");
                         break;
                     }
                 }
                 for (int i = 0; i < Utility.Groups.size(); i++) {
                     if (a.equals(Utility.Groups.get(i))) {
                         resolversList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.GroupsData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        resolversIDList.add(idU);
+                        resolversTypeList.add("1");
                         break;
                     }
                 }
@@ -161,12 +184,30 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                 for(int i=0;i<Utility.Users.size();i++){
                     if(a.equals(Utility.Users.get(i))){
                         concernsList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.UsersData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        concernsIDList.add(idU);
+                        concernsTypeList.add("0");
                         break;
                     }
                 }
                 for(int i=0;i<Utility.Groups.size();i++){
                     if(a.equals(Utility.Groups.get(i))){
                         concernsList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.GroupsData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        concernsIDList.add(idU);
+                        concernsTypeList.add("1");
                         break;
                     }
                 }
@@ -186,12 +227,30 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                 for(int i=0;i<Utility.Users.size();i++){
                     if(a.equals(Utility.Users.get(i))){
                         madetosList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.UsersData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        madetosIDList.add(idU);
+                        madetosTypeList.add("0");
                         break;
                     }
                 }
                 for(int i=0;i<Utility.Groups.size();i++){
                     if(a.equals(Utility.Groups.get(i))){
                         madetosList.add(a);
+                        String idU="";
+                        try {
+                            idU = Utility.GroupsData.get(i).getString("id");
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        madetosIDList.add(idU);
+                        madetosTypeList.add("1");
                         break;
                     }
                 }
@@ -217,12 +276,8 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_submit_scm) {
             if(true){//checkData()) {
                 submitComplaint();
@@ -325,7 +380,58 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         params.put("level_id", Integer.toString(lev));
         params.put("domain_id", Integer.toString(domain_id));
 
+        JSONArray resArr = new JSONArray();
+        for(int i=0;i<resolversList.size();i++) {
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", resolversTypeList.get(i));
+                obj.put("id", resolversIDList.get(i));
+                resArr.put(obj);
+            }
+            catch(JSONException e) {
+
+            }
+        }
+        params.put("resolvable_by", resArr.toString());
+
+        JSONArray madetoArr = new JSONArray();
+        for(int i=0;i<madetosList.size();i++) {
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", madetosTypeList.get(i));
+                obj.put("id", madetosIDList.get(i));
+                madetoArr.put(obj);
+            }
+            catch(JSONException e) {
+
+            }
+        }
+//        params.put("complaint_to", madetoArr.toString());
+
+        JSONArray conArr = new JSONArray();
+        for(int i=0;i<concernsList.size();i++) {
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", concernsTypeList.get(i));
+                obj.put("id", concernsIDList.get(i));
+                conArr.put(obj);
+            }
+            catch(JSONException e) {
+
+            }
+        }
+//        params.put("Complaint_affecting", conArr.toString());
+
         JSONObject parameters = new JSONObject(params);
+        try {
+            parameters.put("complaint_affecting", conArr);
+            parameters.put("resolvable_by", resArr);
+            parameters.put("complaint_to", madetoArr);
+        }
+        catch(JSONException e) {
+
+        }
+        Log.d("SCA", "Parameters while submitting: "+parameters.toString());
         Log.d("Url hit was:", url);
         JsonObjectRequest req= new JsonObjectRequest(Request.Method.POST, url,parameters,
                 new Response.Listener<JSONObject>() {
@@ -333,7 +439,9 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                     public void onResponse(JSONObject response) {
                         //Disimissing the progress dialog
                         loading.dismiss();
+                        Log.d("SCA", response.toString());
                         Utility.showMsg(getApplicationContext(), "Complaint Posting Successful");
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {
@@ -374,9 +482,11 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                             JSONArray groups=response.getJSONArray("groups");
                             for(int i=0;i<users.length();i++){
                                 Utility.Users.add(users.getJSONObject(i).getString("username"));
+                                Utility.UsersData.add(users.getJSONObject(i));
                             }
                             for (int i=0;i<groups.length();i++){
                                 Utility.Groups.add(groups.getJSONObject(i).getString("group_name"));
+                                Utility.GroupsData.add(groups.getJSONObject(i));
                             }
                             List<String> tp= new ArrayList<String>();
                             tp.addAll(Utility.Users);
@@ -391,7 +501,8 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
                             resolveACT.setTextColor(color);
                             resolveACT.setAdapter(resolveADT);
                             //resolveADT.notifyDataSetChanged();
-                            concernACT.setAdapter(concernADT);
+                            concernACT.setAdapter(resolveADT);
+                            madeToACT.setAdapter(resolveADT);
                             //concernADT.notifyDataSetChanged();
                             madeToADT.notifyDataSetChanged();
                             for(int i=0;i<item.size();i++){
