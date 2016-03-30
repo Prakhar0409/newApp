@@ -114,7 +114,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 //            c_Location.setText(Complaint.getString("complaint_location"));
 
             TextView c_postedBy = (TextView) findViewById(R.id.posted_by_acd);
-            c_postedBy.setText(Complaint.getString("posted_by"));
+            c_postedBy.setText(Complaint.getString("posted_by_name"));
 
             TextView c_PostedOn = (TextView) findViewById(R.id.posted_on_acd);
             c_PostedOn.setText(Complaint.getString("date_posted"));

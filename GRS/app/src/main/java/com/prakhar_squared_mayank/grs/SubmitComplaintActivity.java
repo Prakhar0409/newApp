@@ -2,6 +2,7 @@ package com.prakhar_squared_mayank.grs;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -78,7 +79,6 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         item.add("dnahjdnq");
         item.add("abca");
 
-//        domainACT = (AutoCompleteTextView) findViewById(R.id.domain_asc);
         resolveLL = (LinearLayout) findViewById(R.id.resolvingRightsLL);
         concernLL = (LinearLayout) findViewById(R.id.concerningLL);
         madeToLL = (LinearLayout) findViewById(R.id.madeToLL);
@@ -384,7 +384,11 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
 //                            item.clear();
 
                             item=tp;
-                            resolveADT = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, item);
+                            Log.d("SCA", "Setting layout");
+                            resolveADT = new ArrayAdapter<String>(getApplicationContext(), R.layout.my_dropdown_item, item);
+                            Resources res = getResources();
+                            int color = res.getColor(android.R.color.black);
+                            resolveACT.setTextColor(color);
                             resolveACT.setAdapter(resolveADT);
                             //resolveADT.notifyDataSetChanged();
                             concernACT.setAdapter(concernADT);
