@@ -8,6 +8,7 @@
     <ImageView
         android:id="@+id/profile_pic_vrr"
         android:layout_width="70dp"
+        android:src="@drawable/default_profile"
         android:layout_height="70dp"
         android:background="#029587"
         android:layout_centerVertical="true"
@@ -41,23 +42,23 @@
         android:textSize="17dp"
         android:layout_alignBottom="@id/group_text_vrr"/>
 
-    <TextView
-        android:id="@+id/post_text_vrr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post: "
-        android:layout_alignLeft="@id/group_text_vrr"
-        android:layout_below="@id/group_text_vrr"
-        android:textSize="17dp"/>
+    <!--<TextView-->
+        <!--android:id="@+id/post_text_vrr"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Post: "-->
+        <!--android:layout_alignLeft="@id/group_text_vrr"-->
+        <!--android:layout_below="@id/group_text_vrr"-->
+        <!--android:textSize="17dp"/>-->
 
-    <TextView
-        android:id="@+id/post_vrr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/post_text_vrr"
-        android:text="UGS"
-        android:textSize="17dp"
-        android:layout_alignBottom="@id/post_text_vrr"/>
+    <!--<TextView-->
+        <!--android:id="@+id/post_vrr"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@id/post_text_vrr"-->
+        <!--android:text="UGS"-->
+        <!--android:textSize="17dp"-->
+        <!--android:layout_alignBottom="@id/post_text_vrr"/>-->
 
     <ImageView
         android:id="@+id/reject_vrr"

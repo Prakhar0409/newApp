@@ -66,7 +66,7 @@ public class ComplaintsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         viewPager = (CustomViewPager) findViewById(R.id.viewpager);
