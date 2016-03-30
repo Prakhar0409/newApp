@@ -1,6 +1,8 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,19 +11,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,6 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 public class ComplaintDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     String imageString=null;
@@ -46,9 +57,10 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     TimelineFragment timeline;
     WallFragment wallF;
     ImageView bookmarkIV, upIV, downIV;
-    boolean bookmarkedA = false;
+    boolean bookmarkedA = false, resolvable = false, resolved = false;
     TextView c_upcount, c_downcount;
     int voteStatus = -2, complaintID = 0;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +72,23 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
         JSONObject Complaint = null;
         try {
+
             Complaint = new JSONObject(complaintString);
+
+            resolved = Complaint.getBoolean("resolved");
             TextView c_title = (TextView) findViewById(R.id.title_acd);
-            c_title.setText(Complaint.getString("complaint_title"));
+            if(!resolved) {
+                c_title.setText(Complaint.getString("complaint_title"));
+            }
+            else {
+                c_title.setText("[RESOLVED] "+Complaint.getString("complaint_title"));
+            }
 
             TextView c_description=(TextView) findViewById(R.id.complaint_description_acd);
             c_description.setText(Complaint.getString("complaint_details"));
 
             c_upcount=(TextView) findViewById(R.id.up_count_acd);
-            if(Complaint.getString("upvotes_count").equals("null")) {
+            if(!Complaint.has("upvotes_count")) {
                 c_upcount.setText("0");
             }
             else {
@@ -76,7 +96,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
             }
 
             c_downcount=(TextView) findViewById(R.id.down_count_acd);
-            if(Complaint.getString("downvotes_count").equals("null")) {
+            if(!Complaint.has("downvotes_count")) {
                 c_downcount.setText("0");
             }
             else {
@@ -102,7 +122,26 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
             bookmarkedA = Complaint.getBoolean("bookmarked");
             Log.d("ComplaintDetailA", "bookmarked: " + bookmarkedA);
 
-            voteStatus = Complaint.optInt("vote_status", -2);
+            resolvable = Complaint.getBoolean("to_resolve");
+            if(!resolvable) {
+                if(menu != null) {
+                    MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                    item.setVisible(false);
+                    this.invalidateOptionsMenu();
+                }
+            }
+            else {
+                if(menu != null) {
+                    MenuItem item = menu.findItem(R.id.action_mark_resolved);
+                    item.setVisible(true);
+                    this.invalidateOptionsMenu();
+                }
+            }
+
+            voteStatus = Complaint.optInt("vote_made", -2);
+            if(voteStatus == -2) {
+                voteStatus = Complaint.optJSONObject("vote_made").optInt("vote_type");
+            }
             complaintID = Complaint.optInt("id", 0);
 
             c_pic = (ImageView) findViewById(R.id.complaint_pic_acd);
@@ -119,12 +158,13 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
         bookmarkIV = (ImageView) findViewById(R.id.bookmark_acd);
         setBookmark(bookmarkedA);
+        bookmarkIV.setOnClickListener(this);
 
         upIV = (ImageView) findViewById(R.id.up_image_acd);
         upIV.setOnClickListener(this);
 
-        downIV = (ImageView) findViewById(R.id.up_image_acd);
-        upIV.setOnClickListener(this);
+        downIV = (ImageView) findViewById(R.id.down_image_acd);
+        downIV.setOnClickListener(this);
 
         setVoteStatus();
 
@@ -167,6 +207,194 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.complaint_detail_menu, menu);
+        this.menu = menu;
+
+        return true;
+    }
+
+    void changeBookmarkStatus() {
+        final ProgressDialog loading = ProgressDialog.show(this,"Casting Vote...","Please wait...",false,false);
+        String url="http://"+Utility.IP;   //+Utility.CHANGEVOTE+"?complaint_id="+complaintID+"&vote_type="+vo;
+        if(bookmarkedA) {
+            url = url + Utility.UNFOLLOW;
+        }
+        else
+        {
+            url = url + Utility.FOLLOW;
+        }
+        url = url + "?complaint_id="+complaintID;
+        bookmarkedA = !bookmarkedA;
+
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                loading.dismiss();
+                setBookmark(bookmarkedA);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+                loading.dismiss();
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
+    }
+
+    void changeVoteStatus(final int vo) {
+        final ProgressDialog loading = ProgressDialog.show(this,"Casting Vote...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.CHANGEVOTE+"?complaint_id="+complaintID+"&vote_type="+vo;
+
+        System.out.println("Url being hit is : " + url);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                loading.dismiss();
+                updateVoteStatus(vo);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+                loading.dismiss();
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(this);
+        v.add(req1);
+    }
+
+    void updateVoteStatus(int vo) {
+        if(voteStatus == 0) {
+            if(vo == 1) {
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) + 1) + "");
+            }
+            else if(vo == -1) {
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) + 1) + "");
+            }
+        }
+        else if(voteStatus == 1) {
+            if(vo == 1) {
+            }
+            else if(vo == -1) {
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) - 1) + "");
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) + 1) + "");
+            }
+        }
+        else if(voteStatus == -1) {
+            if(vo == 1) {
+                c_downcount.setText((Integer.parseInt(c_downcount.getText().toString()) - 1) + "");
+                c_upcount.setText((Integer.parseInt(c_upcount.getText().toString()) + 1) + "");
+            }
+            else if(vo == -1) {
+            }
+        }
+        voteStatus = vo;
+        setVoteStatus();
+    }
+
+    void markComplaintResoled() {
+        final ProgressDialog loading = ProgressDialog.show(this,"Marking Resolved...","Please wait...",false,false);
+        String url="http://"+Utility.IP+Utility.MARKRESOLVED;
+        Log.d("Url hit was:",url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), volleyError.getMessage().toString());//, Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("complaint_id", complaintID+"");
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        volleySingleton.getInstance(this).getRequestQueue().add(stringRequest);
+    }
+
+    void showMarkResolveDialog() {
+        Log.d("Timeline fragment", "New Status");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mark Resolved?");
+
+        final LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(55, 5, 15, 5);
+        final TextView tv = new TextView(this);
+        tv.setText("Are you sure you want to mark complaint as resolved?");
+//        final EditText input2 = new EditText(this);
+//        input2.setInputType(InputType.TYPE_CLASS_TEXT);
+//        input2.setHint("Enter status here");
+
+        ll.addView(tv);
+        builder.setView(ll);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(complaintID != -2) {
+                    markComplaintResoled();
+                }
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_mark_resolved) {
+            showMarkResolveDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void getTimeLineData( ){
         String url1="http://"+LoginActivity.ip+"/status/complaint?complaint_id="+complaintID;
@@ -307,7 +535,7 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
 
 
     void setTimeline() {
-        Log.d("CDA", "Setting timeline "+timelineData.toString());
+        Log.d("CDA", "Setting timeline " + timelineData.toString());
         if(timeline != null && timelineData != null) {
             timeline.updateTimeline(timelineData, complaintID);
         }
@@ -324,8 +552,13 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.up_image_acd:
+                changeVoteStatus(1);
                 break;
             case R.id.down_image_acd:
+                changeVoteStatus(-1);
+                break;
+            case R.id.bookmark_acd:
+                changeBookmarkStatus();
                 break;
         }
     }

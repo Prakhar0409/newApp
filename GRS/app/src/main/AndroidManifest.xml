@@ -17,7 +17,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity"
-            android:label="Login to GRS">
+            android:label="GR 'fuckin S">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

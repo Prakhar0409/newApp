@@ -20,12 +20,16 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -85,6 +89,43 @@ public class WallFragment extends Fragment implements View.OnClickListener {
         makeComments();
 
         return mainView;
+    }
+
+    public void getCommentData( ){
+        String url1="http://"+LoginActivity.ip+"/comments/complaint?complaint_id="+complaintID;
+
+        System.out.println("Url being hit for comment data is : " + url1);
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String success="";
+                try {
+                    if(response.has("data") && !response.isNull("data")){
+                        wallData = (JSONArray) response.get("data");
+                        if(wallData != null) {
+                            updateWall(wallData, complaintID);
+                        }
+                    }else{
+                        Utility.showMsg(getActivity(), "Fetch data failed");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("data timeline : "+response);
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                System.out.println("volley failed");
+            }
+        }
+        );
+        RequestQueue v = Volley.newRequestQueue(getActivity());
+        v.add(req1);
     }
 
     public void updateWall(JSONArray arr, int complaintid) {
@@ -205,6 +246,7 @@ public class WallFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(String s) {
                         //Disimissing the progress dialog
                         loading.dismiss();
+                        getCommentData();
                         //Showing toast message of the response
 
                     }

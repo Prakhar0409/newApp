@@ -103,12 +103,16 @@ public class SubmitComplaintActivity extends AppCompatActivity implements View.O
         complaintDomains= (Spinner) findViewById(R.id.domain_asc);
 
 
+
         concernADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item,item);
         madeToADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
         resolveADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, item);
         concernLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, concernsList);
         madeToLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, madetosList);
         resolveLVADT = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, resolversList);
+
+
+
 
 
         resolveACT.setThreshold(1);
