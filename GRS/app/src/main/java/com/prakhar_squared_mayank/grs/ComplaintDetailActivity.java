@@ -103,14 +103,14 @@ public class ComplaintDetailActivity extends AppCompatActivity implements View.O
                 c_downcount.setText(Complaint.getString("downvotes_count"));
             }
 
-            TextView c_status=(TextView) findViewById(R.id.status_acd);
-            c_status.setText(Complaint.getString("status_id"));
+//            TextView c_status=(TextView) findViewById(R.id.status_acd);
+//            c_status.setText(Complaint.getString("status"));
 
-            TextView c_resolvedOn=(TextView) findViewById(R.id.resolved_acd);
-            c_resolvedOn.setText(Complaint.getString("date_resolved"));
+//            TextView c_resolvedOn=(TextView) findViewById(R.id.resolved_acd);
+//            c_resolvedOn.setText(Complaint.getString("date_resolved"));
 
-            TextView c_Location = (TextView) findViewById(R.id.location_acd);
-            c_Location.setVisibility(View.INVISIBLE);
+//            TextView c_Location = (TextView) findViewById(R.id.location_acd);
+//            c_Location.setVisibility(View.INVISIBLE);
 //            c_Location.setText(Complaint.getString("complaint_location"));
 
             TextView c_postedBy = (TextView) findViewById(R.id.posted_by_acd);

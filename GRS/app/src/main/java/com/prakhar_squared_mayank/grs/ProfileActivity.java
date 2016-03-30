@@ -1,5 +1,6 @@
 package com.prakhar_squared_mayank.grs;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,7 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView usernameTV, fnameTV, lnameTV, entryTV, contactTV, emailTV, hostelTV;
+    TextView usernameTV, fnameTV, lnameTV, entryTV, contactTV, emailTV, hostelTV, nameTV;
     ImageView profilePicIV;
     Bitmap scaledBitmap;
 
@@ -34,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        nameTV = (TextView) findViewById(R.id.name_ap);
         usernameTV = (TextView) findViewById(R.id.username_ap);
         fnameTV = (TextView) findViewById(R.id.fname_ap);
         lnameTV = (TextView) findViewById(R.id.lname_ap);
@@ -57,7 +59,58 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         entryTV.setText(user.optString("registration_key", "nil"));
         contactTV.setText(user.optString("contact", "nil"));
         emailTV.setText(user.optString("email_id", "nil"));
-        hostelTV.setText(user.optString("hostel_name", "nil"));
+        nameTV.setText(user.optString("first_name") + " " + user.optString("last_name"));
+        getHostel(user.optString("hostel_id", "-2"));
+    }
+
+    public void getHostel(final String hId){
+        if(hId.equals("-2")) {
+            hostelTV.setText("nil");
+            return;
+        }
+        String url="http://"+Utility.IP+Utility.HOSTELS;
+        final ProgressDialog loading = ProgressDialog.show(this, "Fetching hostel...", "Please wait...", false, false);
+        Log.d("Url hit was:", url);
+        JsonObjectRequest req= new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        try {
+                            JSONArray arr=response.getJSONArray("data");
+                            System.out.println(arr);
+
+                            for(int i=0;i<arr.length();i++) {
+                                try {
+                                    JSONObject hostel = arr.getJSONObject(i);
+                                    if(hostel.getString("id").equals(hId)) {
+                                        String hostelName = hostel.getString("hostel_name");
+                                        hostelTV.setText(hostelName);
+                                    }
+                                }
+                                catch(JSONException e) {
+
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast
+                        Utility.showMsg(getApplicationContext(), "volley error");//, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 
     void selectUserPic() {
