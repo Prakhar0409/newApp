@@ -67,8 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signupTV.setOnClickListener(this);
 
 
-        CookieManager manager = new CookieManager( null, CookiePolicy.ACCEPT_ALL );
-        CookieHandler.setDefault(manager);
+
 
         Utility.setupUI(LoginActivity.this,findViewById(R.id.loginView));
     }
@@ -145,12 +144,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     void showComplaintsActivity(JSONObject user) {
         int user_id=0;
         try {
-            user_id= user.getInt("id");
-            Intent it = new Intent(this, ComplaintsActivity.class);
-            Log.d("next activity","yeah");
-            session.createLoginSession(useridET.getText().toString(), passwordET.getText().toString());
-            it.putExtra("user_id",user_id);
-            startActivity(it);
+            if(!user.isNull("id")){
+                user_id= user.getInt("id");
+                Utility.USER=user;
+                Intent it = new Intent(this, ComplaintsActivity.class);
+                Log.d("next activity","yeah");
+                session.createLoginSession(useridET.getText().toString(), passwordET.getText().toString());
+                it.putExtra("user_id",user_id);
+                startActivity(it);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -212,8 +214,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()){
-            case R.id.action_settings:
-                break;
             case R.id.action_change_ip:
                 changeIp();
                 break;

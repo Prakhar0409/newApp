@@ -60,7 +60,7 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
         complaintsAdapter.setListView(complaintsLV);
 
 
-        getData();
+      //  getData();
         return v;
     }
 

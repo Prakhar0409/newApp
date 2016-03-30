@@ -39,6 +39,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -68,6 +71,9 @@ public class ComplaintsActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        CookieManager manager = new CookieManager( null, CookiePolicy.ACCEPT_ALL );
+        CookieHandler.setDefault(manager);
         // Session class instance
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
@@ -106,7 +112,7 @@ public class ComplaintsActivity extends AppCompatActivity {
 
       //  editor.putInt("sPUserId",user_id);
 
-        getUser();
+      //  getUser();
         //getImageString(6);
 
     }
@@ -135,6 +141,21 @@ public class ComplaintsActivity extends AppCompatActivity {
                             if(!user.isNull("id")){
                                 user_id=user.getInt("id");
                                 System.out.println("user logged in!!");
+                                Utility.USER=user;
+                                if(myComplaintsFragment==null){
+                                    myComplaintsFragment=new MyComplaintsFragment();
+                                }
+                                if(othersComplaintsFragment==null){
+                                    othersComplaintsFragment=new OthersComplaintsFragment();
+                                }
+                                myComplaintsFragment.getData();
+                                othersComplaintsFragment.getData();
+                                pic_id=1;
+                                if(!user.isNull("picture_id")){
+                                    pic_id=user.getInt("picture_id");
+                                    getImageString(pic_id);
+                                }
+
                             }else{
                                 session.logoutUser();
                             }
@@ -282,10 +303,7 @@ public class ComplaintsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id==R.id.action_profile){
+       if(id==R.id.action_profile){
             //changeImage();
             Intent it = new Intent(this, ProfileActivity.class);
             startActivity(it);
@@ -340,9 +358,9 @@ public class ComplaintsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         myComplaintsFragment = new MyComplaintsFragment();
-        adapter.addFragment(myComplaintsFragment, "Complaints Affecting Me");
+        adapter.addFragment(myComplaintsFragment, "Affecting Me");
         othersComplaintsFragment = new OthersComplaintsFragment();
-        adapter.addFragment(othersComplaintsFragment, "Other's Complaints");
+        adapter.addFragment(othersComplaintsFragment, "Made to Me");
         viewPager.setAdapter(adapter);
     }
 

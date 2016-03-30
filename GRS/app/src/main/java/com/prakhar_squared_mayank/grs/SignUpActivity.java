@@ -236,7 +236,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     user_id=user.getInt("id");
                                     Utility.showMsg(getApplicationContext(), "Signed up with UserID : " + Integer.toString(user_id));
                                     System.out.println("Signed up with UserID : " + Integer.toString(user_id));
-                                    showComplaintsActivity(user_id, pic_id);
+                                    showComplaintsActivity(user_id, pic_id,user);
                                 }else{
                                     Utility.showMsg(getApplicationContext(), ": Unable to register : ");
                                 }
@@ -366,7 +366,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    void showComplaintsActivity(int user_id,int pic_id) {
+    void showComplaintsActivity(int user_id,int pic_id,JSONObject user) {
+
+
+
         Intent it = new Intent(this, ComplaintsActivity.class);
         it.putExtra("user_id",user_id);
         it.putExtra("pic_id",pic_id);
