@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="#ecff96"
+    android:background="#ffcfad"
     tools:context="com.prakhar_squared_mayank.grs.TimelineFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -16,7 +16,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#ecff96">
+            android:background="#ffcfad">
             <ImageView
                 android:id="@+id/image_ft"
                 android:layout_width="40dp"

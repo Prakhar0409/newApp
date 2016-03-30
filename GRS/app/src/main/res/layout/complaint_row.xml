@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="#96e1fa">
+    android:background="#FF4C3B">
 
     <RelativeLayout
         android:id="@+id/hide_view_cr"
@@ -32,7 +32,7 @@
         android:id="@+id/main_view_cr"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="#9ce7ff">
+        android:background="#ff97b66a">
 
         <ImageView
             android:id="@+id/image_cr"
@@ -57,6 +57,7 @@
             android:id="@+id/title_cr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#ffffff"
             android:text="Complaint1"
             android:layout_toRightOf="@id/image_cr"
             android:layout_marginLeft="10dp"
@@ -66,6 +67,7 @@
         <TextView
             android:id="@+id/desc_cr"
             android:layout_width="wrap_content"
+            android:textColor="#ffffff"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/title_cr"
             android:text="Some Description of complaint"
@@ -86,6 +88,7 @@
             android:id="@+id/up_count_cr"
             android:text="12"
             android:layout_width="wrap_content"
+            android:textColor="#ffffff"
             android:layout_marginBottom="10dp"
             android:layout_height="wrap_content"
             android:textSize="16dp"
@@ -110,6 +113,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#ffffff"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"/>
