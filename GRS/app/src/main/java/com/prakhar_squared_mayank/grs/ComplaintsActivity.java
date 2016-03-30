@@ -213,6 +213,7 @@ public class ComplaintsActivity extends AppCompatActivity {
         volleySingleton.getInstance(getApplicationContext()).getRequestQueue().add(req);
     }
 
+    // get image of user
     public void getImageString(int id){
         String url="http://"+Utility.IP+Utility.DOWNLOADIMAGE+"?image_id="+Integer.toString(id);
         Log.d("Url hit was:", url);
@@ -234,7 +235,7 @@ public class ComplaintsActivity extends AppCompatActivity {
                             }
 
 
-                            showToast("Success ful image chuityapa");
+                            showToast("Successful Image retrieved");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

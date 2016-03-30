@@ -88,7 +88,7 @@ public class MyComplaintsFragment extends Fragment {
                         }
                         updateAdapter(data);
                     }else{
-                        showToast("Fetch data failed");
+                  //      showToast("Fetch data failed");
                     }
 
                 } catch (JSONException e) {

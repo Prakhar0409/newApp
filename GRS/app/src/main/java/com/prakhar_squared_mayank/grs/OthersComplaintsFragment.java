@@ -87,7 +87,7 @@ public class OthersComplaintsFragment extends Fragment{         // implements Ad
                         }
                         updateAdapter(data);
                     }else{
-                        showToast("Fetch data2 ");
+                      //  showToast("Fetch data2 ");
                     }
 
                 } catch (JSONException e) {

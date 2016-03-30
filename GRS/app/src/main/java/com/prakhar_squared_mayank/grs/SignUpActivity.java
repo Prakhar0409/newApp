@@ -352,7 +352,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if( !passwordET.getText().toString().trim().equals(confPasswordET.getText().toString().trim())) {
             Utility.showMsg(this, "Password and Confirm password do not match");
-            System.out.println("chutiya");
+            System.out.println("done");
             return false;
         }
         if(!isEmailValid(emailET.getText().toString())) {

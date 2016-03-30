@@ -65,9 +65,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signupTV = (TextView) findViewById(R.id.signup_al);
         signupTV.setOnClickListener(this);
 
-
-
-
         Utility.setupUI(LoginActivity.this,findViewById(R.id.loginView));
     }
 
@@ -83,9 +80,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
+
+//    Volley request to login user
     void loginUser() {
         String url="http://"+Utility.IP+Utility.LOGIN_URL;
-
         Map<String, String> params = new HashMap();
         params.put("username", useridET.getText().toString().trim());
         params.put("password", passwordET.getText().toString().trim());
@@ -122,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                System.out.println("Volley failed");
+                //System.out.println("Volley failed");
             }
         }
         );
